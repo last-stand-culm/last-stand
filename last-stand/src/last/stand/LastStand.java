@@ -1,21 +1,17 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+in order to send to github you must go through these steps
+*(if you added a class) then go to team and click add
+*click commit then push
+*click pull to get latest updated version of program 
  */
 package last.stand;
 
-/**
- *
- * @author cdavies7845
- */
+
 public class LastStand {
 
-    /**
-     * @param args the command line arguments
-     */
+   
     public static void main(String[] args) {
-        // TODO code application logic here
+       
     }
     
 }
