@@ -7,13 +7,27 @@ in order to send to github you must go through these steps
 package last.stand;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.BasicGame;
+import org.newdawn.slick.SlickException;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.state.*;
 
-public class LastStand {
+public class LastStand extends StateBasedGame {
+    public static final int Menu=0;
 
+    public LastStand(){
+        super("LastStand");
+        this.addState(new Menu(Menu));
+    }
+    public void initStatesList(GameContainer gc)throws SlickException{
+        this.getState(Menu).init(gc,this);
+        this.enterState(Menu);
+    }
+    
    
     public static void main(String[] args) {
        try{
-           AppGameContainer app=new AppGameContainer(new Menu());
+           AppGameContainer app=new AppGameContainer(new LastStand());
            app.setDisplayMode(800,600,false);
            app.start();
        }
