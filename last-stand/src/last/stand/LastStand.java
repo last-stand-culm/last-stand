@@ -26,7 +26,7 @@ public class LastStand extends StateBasedGame {
     public static void main(String[] args) {
        try{
            AppGameContainer app=new AppGameContainer(new LastStand());
-           app.setDisplayMode(800,600,false);
+           app.setDisplayMode(1100,800,false);
            app.start();
        }
        catch(SlickException e){
