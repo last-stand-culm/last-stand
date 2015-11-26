@@ -45,6 +45,11 @@ public class Menu extends BasicGameState {
                 sbg.enterState(1);
             }
         }
+        if(x>=45 && y>=398 && x<=406 && y<=508){
+          if(input.isMouseButtonDown(0)){
+              sbg.enterState(2);
+          }  
+        }
         
         System.out.println(x);
         System.out.println(y);
