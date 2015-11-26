@@ -13,16 +13,19 @@ import org.newdawn.slick.state.*;
 public class LastStand extends StateBasedGame {
     public static final int Menu=0;
     public static final int instructions=1;
+    public static final int option=2;
 
     public LastStand(){
         super("LastStand");
         this.addState(new Menu(Menu));
         this.addState(new Instruction(instructions));
+        this.addState(new Options(option));
         
     }
     public void initStatesList(GameContainer gc)throws SlickException{
         this.getState(Menu).init(gc,this);
         this.getState(instructions).init(gc,this);
+        this.getState(option).init(gc, this);
         this.enterState(Menu);
     }
     
