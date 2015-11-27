@@ -7,7 +7,7 @@ import org.newdawn.slick.state.*;
 public class Options extends BasicGameState {
     
     private boolean musicOn =true;
-    private boolean easy=true;
+    private boolean easy=false;
     private float x,y;
     private Image optionPic;
     private Image exitButton;
@@ -63,7 +63,32 @@ public class Options extends BasicGameState {
           Input input=gc.getInput();
         x=input.getMouseX();
         y=input.getMouseY();
-        
+       
+        //when mouse is over button off and button is clicked
+       if(x>=726 && y>=104 && x<=1083 && y<=209){
+            if(input.isMouseButtonDown(0) && musicOn==true){
+                musicOn=false;
+            }
+       } 
+       //when mouse is over button on and buton is clicked
+       if(x>=275 && y>=103 && x<=633 && y<=210){
+          if(input.isMouseButtonDown(0) && musicOn==false){
+              musicOn=true;
+          } 
+       }
+       //when mouse is over button easy and button is clicked
+       if(x>=356 && y>=249 && x<=714 && y<=354){
+         if(input.isMouseButtonDown(0) && easy==false){
+             easy=true;
+         }  
+       } 
+       //when mouse is over button hard and button is clicked
+       if(x>=726 && y>=248 && x<=1083 && y<=354){
+           if(input.isMouseButtonDown(0) && easy==true){
+               easy=false;
+           }
+       }
+       //when mouse is over exit button which brings you back to menu
        if(x>=33 && y>=601 && x<=390 && y<=705){
           if(input.isMouseButtonDown(0)){
                sbg.enterState(0);
