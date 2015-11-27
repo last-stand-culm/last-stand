@@ -7,7 +7,7 @@ import org.newdawn.slick.state.*;
 public class Options extends BasicGameState {
     
     private boolean musicOn =true;
-    private boolean easy=true;
+    private boolean easy=false;
     private float x,y;
     private Image optionPic;
     private Image exitButton;
@@ -52,6 +52,8 @@ public class Options extends BasicGameState {
         if(musicOn==false){musicButtonOffGreen.draw(700,55);}
         if(easy==true){easyGreen.draw(330,200);}
         if(easy==true){hardRed.draw(700,200);}
+        if(easy==false){easyRed.draw(330,200);}
+        if(easy==false){hardGreen.draw(700,200);}
         scoreButton.draw(500,400);
      }
      
