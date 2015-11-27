@@ -33,7 +33,7 @@ public class Instruction extends BasicGameState {
         // if mouse is over the play button and button is clicked
         if(x>=25 && y>=682 && x<=386 && y<=792){
             if(input.isMouseButtonDown(0)){
-                
+                sbg.enterState(3);
             }
         }
         
