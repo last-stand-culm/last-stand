@@ -17,9 +17,9 @@ public class Menu extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{  
         menuPic=new Image("res/main-menu.Jpg");
         playButton=new Image("res/play_button.png");  
-        optionButton=new Image("res/option_button.png");  
+        optionButton=new Image("res/option_button1.png");  
         playButtonSelect=new Image("res/play_button_selected.png");  
-        optionButtonSelect=new Image("res/option_button_selected.png");  
+        optionButtonSelect=new Image("res/option_button_selected1.png");  
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException { 
