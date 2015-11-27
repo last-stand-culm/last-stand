@@ -7,7 +7,7 @@ import org.newdawn.slick.state.*;
 public class Options extends BasicGameState {
     
     private boolean musicOn =true;
-    private boolean easy=false;
+    private boolean easy=true;
     private float x,y;
     private Image optionPic;
     private Image exitButton;
@@ -55,6 +55,8 @@ public class Options extends BasicGameState {
         if(easy==false){easyRed.draw(330,200);}
         if(easy==false){hardGreen.draw(700,200);}
         scoreButton.draw(500,400);
+        if(x>=33 && y>=601 && x<=390 && y<=705){exitButtonSelected.draw(5,550);}
+        if(x>=527 && y>=449 && x<=883 && y<=555){scoreButtonSelect.draw(500,400);}
      }
      
      public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
@@ -62,16 +64,11 @@ public class Options extends BasicGameState {
         x=input.getMouseX();
         y=input.getMouseY();
         
-        if(x>=44 && y>=198 && x<=406 && y<=306 ){
-            if(input.isMouseButtonDown(0)){
-                sbg.enterState(1);
-            }
-        }
-        if(x>=45 && y>=398 && x<=406 && y<=508){
+       if(x>=33 && y>=601 && x<=390 && y<=705){
           if(input.isMouseButtonDown(0)){
-              sbg.enterState(2);
-          }  
-        }
+               sbg.enterState(0);
+           }
+      }
         
         System.out.println(x);
         System.out.println(y);   
