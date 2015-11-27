@@ -39,7 +39,7 @@ public class Instruction extends BasicGameState {
      instructionPic.draw();   
      playButtonInstruction.draw(1,635);
      if(x>=25 && y>=682 && x<=386 && y<=792){playButtonSelectInstruction.draw(1,635);}
-     WKey.draw(3,100);
+     
      }
      
      public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
