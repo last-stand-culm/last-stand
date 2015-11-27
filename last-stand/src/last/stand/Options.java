@@ -5,7 +5,9 @@ import org.newdawn.slick.state.*;
 
 
 public class Options extends BasicGameState {
-        public Options(int state){
+       
+    
+    public Options(int state){
         
     }
     
