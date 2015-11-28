@@ -7,14 +7,6 @@ public class Instruction extends BasicGameState {
     private Image instructionPic;
     private Image playButtonInstruction;
     private Image playButtonSelectInstruction;
-    private Image WKey;
-    private Image AKey;
-    private Image SKey;
-    private Image DKey;
-    private Image EKey;
-    private Image ESCKey;
-    private Image mouse;
-    private Image zombie;
     private float x,y;
     
     public Instruction(int state){
@@ -25,21 +17,15 @@ public class Instruction extends BasicGameState {
      instructionPic=new Image("res/instructions.Jpg");
      playButtonInstruction=new Image ("res/play_button.png");
      playButtonSelectInstruction=new Image("res/play_button_selected.png");
-     WKey=new Image("res/W_Key.fw.png");
-     //AKey=new Image("res/");
-    // SKey=new Image("res/");
-    // DKey=new Image("res/"); 
-    // EKey=new Image("res/");
-     //ESCKey=new Image("res/");
-    // mouse=new Image("res/");
-   //  zombie=new Image("res/");
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
      instructionPic.draw();   
      playButtonInstruction.draw(1,635);
      if(x>=25 && y>=682 && x<=386 && y<=792){playButtonSelectInstruction.draw(1,635);}
-     
+     g.drawString("W = move up \nA = move left\nS = move down\nD = move right\nE = select/pick up gun\nESC = bring up menu bar\nLeft mouse button = shoot",100,200);
+     g.drawString("OBJECTIVE:\nyour objective is to survive as long as you can there is\nno win to the game you just do a little better everytime ", 100, 500);
+     g.drawString("Zombie-\n\n\n\nYou-", 100, 350);
      }
      
      public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
