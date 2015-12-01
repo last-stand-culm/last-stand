@@ -5,11 +5,14 @@ import org.newdawn.slick.state.*;
 public class Menu extends BasicGameState {
     
     private float x,y;
+    
     private Image menuPic;
     private Image playButton;
     private Image optionButton;
     private Image playButtonSelect;
     private Image optionButtonSelect;
+    
+    private Sound sound;
     
     public Menu (int state) {  
     }
@@ -19,7 +22,10 @@ public class Menu extends BasicGameState {
         playButton=new Image("res/play_button.png");  
         optionButton=new Image("res/option_button1.png");  
         playButtonSelect=new Image("res/play_button_selected.png");  
-        optionButtonSelect=new Image("res/option_button_selected1.png");  
+        optionButtonSelect=new Image("res/option_button_selected1.png"); 
+        
+        sound = new Sound("res/menu_button_select_sound.ogg");
+        
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException { 
@@ -42,11 +48,13 @@ public class Menu extends BasicGameState {
         
         if(x>=44 && y>=198 && x<=406 && y<=306 ){
             if(input.isMouseButtonDown(0)){
+                sound.playAt(-1, 0, 0);
                 sbg.enterState(1);
             }
         }
         if(x>=45 && y>=398 && x<=406 && y<=508){
           if(input.isMouseButtonDown(0)){
+              sound.playAt(-1,0,0);
               sbg.enterState(2);
           }  
         }
