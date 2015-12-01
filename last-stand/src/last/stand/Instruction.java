@@ -14,7 +14,7 @@ public class Instruction extends BasicGameState {
     }
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
-     instructionPic=new Image("res/instructions.Jpg");
+     instructionPic=new Image("res/instructions_new.fw.png");
      playButtonInstruction=new Image ("res/play_button.png");
      playButtonSelectInstruction=new Image("res/play_button_selected.png");
     }
