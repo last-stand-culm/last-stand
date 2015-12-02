@@ -24,7 +24,7 @@ public class Menu extends BasicGameState {
         playButtonSelect=new Image("res/play_button_selected.png");  
         optionButtonSelect=new Image("res/option_button_selected1.png"); 
         
-        sound = new Sound("res/menu_button_select_sound.ogg");
+        sound = new Sound("res/menu_button_select_sound1.ogg");
         
     }
     
@@ -54,7 +54,7 @@ public class Menu extends BasicGameState {
         }
         if(x>=45 && y>=398 && x<=406 && y<=508){
           if(input.isMouseButtonDown(0)){
-              sound.playAt(-1,0,0);
+              sound.playAt(-3,0,0);
               sbg.enterState(2);
           }  
         }

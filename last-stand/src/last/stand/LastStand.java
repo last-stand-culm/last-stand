@@ -4,6 +4,8 @@ in order to send to github you must go through these steps
 *click commit then push
 *click pull to get latest updated version of program 
  */
+
+// sound wont work on my computer at home
 package last.stand;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
@@ -37,6 +39,7 @@ public class LastStand extends StateBasedGame {
        try{
            AppGameContainer app=new AppGameContainer(new LastStand());
            app.setDisplayMode(1100,800,false);
+           app.setTargetFrameRate(60);
            app.start();
        }
        catch(SlickException e){

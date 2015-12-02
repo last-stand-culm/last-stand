@@ -21,7 +21,8 @@ public class Instruction extends BasicGameState {
      playButtonInstruction=new Image ("res/play_button.png");
      playButtonSelectInstruction=new Image("res/play_button_selected.png");
      
-     playSound = new Sound("res/play_button_sound.ogg");
+     playSound=new Sound("res/menu_button_select_sound1.ogg");
+     
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
@@ -41,7 +42,7 @@ public class Instruction extends BasicGameState {
         // if mouse is over the play button and button is clicked
         if(x>=25 && y>=682 && x<=386 && y<=792){
             if(input.isMouseButtonDown(0)){
-                playSound.playAt(-1,0,0);
+                playSound.playAt(0,0,0);
                 sbg.enterState(3);
             }
         }
