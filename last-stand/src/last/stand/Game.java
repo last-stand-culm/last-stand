@@ -10,16 +10,14 @@ public class Game extends BasicGameState {
     public static int score=0,round=0,kills=0,money=500,ammo;
     public static String weapon=" ";
     private TiledMap map;
+    private int x=15,y=13;
     
-    private Music music;
             
     public Game(int state){
         
     }
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
-    music= new  Music("res/Zombie__Horror_Music_Mix.ogg");
-    music.setVolume(0.5f);
     map=new TiledMap("res/map_game.tmx");
     }
     
@@ -30,14 +28,26 @@ public class Game extends BasicGameState {
     g.drawString("Money: "+money,625,25);
     g.drawString("Weapon: "+weapon, 825, 25);
     g.drawString("Ammo: "+ammo, 1000, 25);
-    map.render(0, 0);
+    map.render(-64, -448);
+    g.fillRect(x*32,y*32, 32, 32);
     
      }
      
      public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
-     music.play();  
      int objectLayer = map.getLayerIndex("Tile Layer 1");
-     map.getTileId(0,0,objectLayer);
+     int objectLayer2 = map.getLayerIndex("details");
+   
+     
+     
+     
+     if(gc.getInput().isKeyPressed(Input.KEY_D)){
+         if(map.getTileId(x+1,y,objectLayer)==266){
+            x++;   
+         }
+     }
+     
+     System.out.println(map.getTileId(25,y,objectLayer));
+     System.out.println(map.getTileId(25,y,objectLayer2));
      }
      
       public int getID(){
