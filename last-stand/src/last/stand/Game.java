@@ -36,7 +36,8 @@ public class Game extends BasicGameState {
      
      public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      music.play();  
-     int objectLayers = map.getLayerIndex("Tile Layer 1");
+     int objectLayer = map.getLayerIndex("Tile Layer 1");
+     map.getTileId(0,0,objectLayer);
      }
      
       public int getID(){
