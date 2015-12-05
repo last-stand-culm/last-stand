@@ -28,7 +28,7 @@ public class Game extends BasicGameState {
     g.drawString("Money: "+money,625,25);
     g.drawString("Weapon: "+weapon, 825, 25);
     g.drawString("Ammo: "+ammo, 1000, 25);
-    map.render(-64, -448);
+    map.render(-64, -448); 
     g.fillRect(x*32,y*32, 32, 32);
     
      }
@@ -43,6 +43,24 @@ public class Game extends BasicGameState {
      if(gc.getInput().isKeyPressed(Input.KEY_D)){
          if(map.getTileId(x+1,y,objectLayer)==266){
             x++;   
+         }
+     }
+     
+     if(gc.getInput().isKeyPressed(Input.KEY_W)){
+         if(map.getTileId(x+1,y,objectLayer)==266){
+            y--;   
+         }
+     }
+     
+     if(gc.getInput().isKeyPressed(Input.KEY_A)){
+         if(map.getTileId(x+1,y,objectLayer)==266){
+            x--;   
+         }
+     }
+     
+     if(gc.getInput().isKeyPressed(Input.KEY_S)){
+         if(map.getTileId(x+1,y,objectLayer)==266){
+            y++;   
          }
      }
      
