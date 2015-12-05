@@ -10,7 +10,7 @@ public class Game extends BasicGameState {
     public static int score=0,round=0,kills=0,money=500,ammo;
     public static String weapon=" ";
     private TiledMap map;
-    private int x=15,y=13;
+    private int x=-2,y=-14,x2=17,y2=27;
     
             
     public Game(int state){
@@ -22,14 +22,15 @@ public class Game extends BasicGameState {
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
+    map.render(x*32, y*32); 
     g.drawString("Score: "+score,25,25);
     g.drawString("Round: "+round,225,25);
     g.drawString("Kills: "+kills,425,25);
     g.drawString("Money: "+money,625,25);
     g.drawString("Weapon: "+weapon, 825, 25);
     g.drawString("Ammo: "+ammo, 1000, 25);
-    map.render(-64, -448); 
-    g.fillRect(x*32,y*32, 32, 32);
+    
+    g.fillRect(480, 416, 32, 32);
     
      }
      
@@ -41,31 +42,35 @@ public class Game extends BasicGameState {
      
      
      if(gc.getInput().isKeyPressed(Input.KEY_D)){
-         if(map.getTileId(x+1,y,objectLayer)==266){
-            x++;   
+         if(map.getTileId(x2+1,y2,objectLayer)==0){
+            x--;
+            x2++;
          }
      }
      
      if(gc.getInput().isKeyPressed(Input.KEY_W)){
-         if(map.getTileId(x+1,y,objectLayer)==266){
-            y--;   
+         if(map.getTileId(x2,y2-1,objectLayer)==0){
+            y++;
+            y2--;
          }
      }
      
      if(gc.getInput().isKeyPressed(Input.KEY_A)){
-         if(map.getTileId(x+1,y,objectLayer)==266){
-            x--;   
+         if(map.getTileId(x2-1,y2,objectLayer)==0){
+            x++;
+            x2--;
          }
      }
      
      if(gc.getInput().isKeyPressed(Input.KEY_S)){
-         if(map.getTileId(x+1,y,objectLayer)==266){
-            y++;   
+         if(map.getTileId(x2,y2+1,objectLayer)==0){
+            y--;
+            y2++;
          }
      }
      
-     System.out.println(map.getTileId(25,y,objectLayer));
-     System.out.println(map.getTileId(25,y,objectLayer2));
+     System.out.println(map.getTileId(x2,y2,objectLayer));
+     System.out.println(map.getTileId(x2,y2,objectLayer2));
      }
      
       public int getID(){
