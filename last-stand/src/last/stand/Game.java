@@ -14,7 +14,9 @@ public class Game extends BasicGameState {
     
     private TiledMap map;
     
+    private Image heart;
     
+    private boolean heart1=true,heart2=true,heart3=true;
             
     public Game(int state){
         
@@ -22,17 +24,21 @@ public class Game extends BasicGameState {
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
     map=new TiledMap("res/map_game.tmx");
+    heart=new Image("res/heart_pixel.png");
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
     // rendering all images/strings to screen
     map.render(x*32, y*32); 
     g.drawString("Score: "+score,25,25);
-    g.drawString("Round: "+round,225,25);
-    g.drawString("Kills: "+kills,425,25);
-    g.drawString("Money: "+money,625,25);
-    g.drawString("Weapon: "+weapon, 825, 25);
-    g.drawString("Ammo: "+ammo, 1000, 25);
+    g.drawString("Round: "+round,125,25);
+    g.drawString("Kills: "+kills,225,25);
+    g.drawString("Money: "+money,355,25);
+    g.drawString("Weapon: "+weapon, 625, 25);
+    g.drawString("Ammo: "+ammo, 525, 25);
+    if(heart1==true){heart.draw(850, 20);}
+    if(heart2==true){heart.draw(900, 20);}
+    if(heart3==true){heart.draw(950, 20);}
     g.fillRect(480, 416, 32, 32);
     
      }
