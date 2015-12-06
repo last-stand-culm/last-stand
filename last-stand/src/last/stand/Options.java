@@ -6,9 +6,11 @@ import org.newdawn.slick.state.*;
 
 public class Options extends BasicGameState {
     
-    private boolean musicOn =true;
-    private boolean easy=true;
+    public boolean musicOn =true;
+    public boolean easy=true;
+    
     private float x,y;
+    
     private Image optionPic;
     private Image exitButton;
     private Image exitButtonSelected;
@@ -28,6 +30,7 @@ public class Options extends BasicGameState {
     }
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
+        //finding the location of all the images and placing them with their variables
         optionPic=new Image("res/option.Jpg");
         exitButton=new Image("res/exit_button.png");
         exitButtonSelected=new Image("res/exit_button_select.png");
@@ -44,6 +47,7 @@ public class Options extends BasicGameState {
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
+        //rendering all the images and strings
         optionPic.draw();
         exitButton.draw(5,550);
         if(musicOn==true){musicButtonOnGreen.draw(250,55);}
@@ -95,8 +99,7 @@ public class Options extends BasicGameState {
            }
       }
         
-        System.out.println(x);
-        System.out.println(y);   
+        
      }
      
       public int getID(){

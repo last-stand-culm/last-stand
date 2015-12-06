@@ -29,6 +29,7 @@ public class Menu extends BasicGameState {
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException { 
+        //rendering all images and strings to the screen
         menuPic.draw();
         playButton.draw(20,150);
         optionButton.draw(20,350);
@@ -45,13 +46,14 @@ public class Menu extends BasicGameState {
         Input input=gc.getInput();
         x=input.getMouseX();
         y=input.getMouseY();
-        
+        //if mouse is over play and left mouse button is clicked
         if(x>=44 && y>=198 && x<=406 && y<=306 ){
             if(input.isMouseButtonDown(0)){
                 sound.playAt(-1, 0, 0);
                 sbg.enterState(1);
             }
         }
+        //if mouse is over options and left mouse button is clicked
         if(x>=45 && y>=398 && x<=406 && y<=508){
           if(input.isMouseButtonDown(0)){
               sound.playAt(-3,0,0);

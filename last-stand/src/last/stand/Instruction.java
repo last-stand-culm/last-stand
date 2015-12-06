@@ -7,6 +7,8 @@ public class Instruction extends BasicGameState {
     private Image instructionPic;
     private Image playButtonInstruction;
     private Image playButtonSelectInstruction;
+    private Image zombie_intsruction;
+    private Image player_instruction;
     
     private float x,y;
     
@@ -20,18 +22,24 @@ public class Instruction extends BasicGameState {
      instructionPic=new Image("res/instructions_new.fw.png");
      playButtonInstruction=new Image ("res/play_button.png");
      playButtonSelectInstruction=new Image("res/play_button_selected.png");
+     zombie_intsruction=new Image("res/zombie_instruction1.png");
+     player_instruction=new Image("res/player_instruction1.fw.png");
      
      playSound=new Sound("res/menu_button_select_sound1.ogg");
      
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
+     // rendering all images and strings to the screen
      instructionPic.draw();   
      playButtonInstruction.draw(1,635);
      if(x>=25 && y>=682 && x<=386 && y<=792){playButtonSelectInstruction.draw(1,635);}
-     g.drawString("W = move up \nA = move left\nS = move down\nD = move right\nE = select/pick up gun\nESC = bring up menu bar\nLeft mouse button = shoot",100,200);
-     g.drawString("OBJECTIVE:\nyour objective is to survive as long as you can there is\nno win to the game you just do a little better everytime ", 100, 500);
-     g.drawString("Zombie-\n\n\n\nYou-", 100, 350);
+     g.drawString("W = move up \nA = move left\nS = move down\nD = move right\nE = select/pick up gun\nESC = bring up menu bar\nLeft mouse button = shoot",100,100);
+     g.drawString("OBJECTIVE:\nyour objective is to survive as long as you can there is\nno win to the game you just do a little better everytime. Your score \nwill be entered into a scoreboard which you can see in the option menu ", 100, 500);
+     g.drawString("Zombie-\n\n\n\n\nYou-", 100, 300);
+     zombie_intsruction.draw(170,290);
+     player_instruction.draw(170,400);
+     
      }
      
      public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
@@ -48,8 +56,7 @@ public class Instruction extends BasicGameState {
         }
         
         
-        System.out.println(x);
-        System.out.println(y);
+        
      }
      
       public int getID(){

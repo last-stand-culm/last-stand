@@ -5,7 +5,7 @@ in order to send to github you must go through these steps
 *click pull to get latest updated version of program 
  */
 
-// sound wont work on my computer at home
+
 package last.stand;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
