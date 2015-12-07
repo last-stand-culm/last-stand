@@ -4,7 +4,7 @@ in order to send to github you must go through these steps
 *click commit then push
 *click pull to get latest updated version of program 
  */
-
+// we need to make collison for the mystery box using tile editor 
 
 package last.stand;
 import org.newdawn.slick.AppGameContainer;

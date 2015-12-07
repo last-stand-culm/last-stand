@@ -61,8 +61,7 @@ public class Menu extends BasicGameState {
           }  
         }
         
-        System.out.println(x);
-        System.out.println(y);
+        
     }
     public int getID(){
         return 0;
