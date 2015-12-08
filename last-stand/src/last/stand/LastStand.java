@@ -5,6 +5,8 @@ in order to send to github you must go through these steps
 *click pull to get latest updated version of program 
  */
 // we need to make collison for the mystery box using tile editor 
+//sound wont work at home computer
+//collison with walls glitches player gets stuck for a sec
 
 package last.stand;
 import org.newdawn.slick.AppGameContainer;
