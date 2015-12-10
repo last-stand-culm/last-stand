@@ -3,6 +3,8 @@ package last.stand;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import org.newdawn.slick.tiled.*;
+import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Game extends BasicGameState {
@@ -21,6 +23,16 @@ public class Game extends BasicGameState {
     private boolean heart1=true,heart2=true,heart3=true;
     private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
     private boolean buyDoor=false;
+    private boolean start=false;
+    
+    private ArrayList<Integer> zombieX = new ArrayList<Integer>();
+    private ArrayList<Integer> zombieY = new ArrayList<Integer>();
+    
+    private int[][] zombieSpawn=new int[3][2];
+    
+    private int time=0;
+    
+    Random randomGenerator = new Random();
             
     public Game(int state){
         
@@ -89,13 +101,39 @@ public class Game extends BasicGameState {
         doorRight.draw(x*32+2016,y*32+1760);
     }
     if(buyDoor==true){g.drawString("$750 (E)", 464, 400);}
-    
+    g.setColor(Color.red);
+    g.fillRect(x*32+zombieX.get(0)*32,y*32+zombieY.get(0)*32,32,32);
+   // g.fillRect(x*32+736,y*32+576,32,32);
+   // g.fillRect(x*32+896,y*32+992,32,32);
      }
      
-     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
+    public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      int objectLayer = map.getLayerIndex("Tile Layer 1");
-    
      
+     //getting the zombie to come out of its spawn and zombie spawning
+    if(!start){
+        zombieX.add(12);
+        zombieY.add(18);
+        start=true;
+        zombieSpawn[0][0]=12;
+        zombieSpawn[0][1]=18;
+        zombieSpawn[1][0]=23;
+        zombieSpawn[1][1]=18;
+        zombieSpawn[2][0]=28;
+        zombieSpawn[2][1]=31;
+        
+    }
+    time+=delta;
+    if(time>=500){
+//        if(zombieY.get(0)<20){
+//            zombieY.set(0,zombieY.get(0)+1);
+//        }
+        int randomInt = randomGenerator.nextInt(3);
+        zombieX.set(0,zombieSpawn[randomInt][0]);
+        zombieY.set(0,zombieSpawn[randomInt][1]);
+        time=0;
+    }
+    
      //to move right and checking for doors
      if(((x2==10&&y2==66)||(x2==10&&y2==67)||(x2==10&&y2==68)||(x2==10&&y2==69))&&!door3Open){
          buyDoor=true;
