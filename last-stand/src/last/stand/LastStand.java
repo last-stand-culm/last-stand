@@ -41,7 +41,7 @@ public class LastStand extends StateBasedGame {
        try{
            AppGameContainer app=new AppGameContainer(new LastStand());
            app.setDisplayMode(1100,800,false);
-           app.setTargetFrameRate(60);
+           app.setTargetFrameRate(32);
            app.start();
        }
        catch(SlickException e){
