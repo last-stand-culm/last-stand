@@ -25,11 +25,15 @@ public class Game extends BasicGameState {
     private boolean buyDoor=false;
     private boolean start=false;
     
-    private ArrayList<Integer> zombieX = new ArrayList<Integer>();
-    private ArrayList<Integer> zombieY = new ArrayList<Integer>();
+    private ArrayList<Integer> zombieX = new ArrayList();
+    private ArrayList<Integer> zombieY = new ArrayList();
+    private ArrayList<Integer> moveC = new ArrayList();
+    
+    private ArrayList<Boolean> toMove = new ArrayList();
     
     private int[][] zombieSpawn=new int[3][2];
     private int[] position=new int[3];
+    
     
     private int time=0,test=0;
     
@@ -103,15 +107,16 @@ public class Game extends BasicGameState {
     }
     if(buyDoor==true){g.drawString("$750 (E)", 464, 400);}
     g.setColor(Color.red);
-    g.fillRect(x*32+zombieX.get(0)*32,y*32+zombieY.get(0)*32,32,32);
-    if(zombieX.size()>=2){g.fillRect(x*32+zombieX.get(1)*32,y*32+zombieY.get(1)*32,32,32);}
+    for(int i=0;i<zombieX.size();i++){
+         g.fillRect(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
+    }
+//    if(zombieX.size()>=2){g.fillRect(x*32+zombieX.get(1)*32,y*32+zombieY.get(1)*32,32,32);}
    // g.fillRect(x*32+736,y*32+576,32,32);
    // g.fillRect(x*32+896,y*32+992,32,32);
      }
      
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      int objectLayer = map.getLayerIndex("Tile Layer 1");
-     System.out.println("zombieX"+zombieX.size());
      
      //getting the zombie to come out of its spawn and zombie spawning
     if(!start){
@@ -123,6 +128,8 @@ public class Game extends BasicGameState {
         
         zombieX.add(12);
         zombieY.add(18);
+        toMove.add(true);
+        moveC.add(0);
         start=true;
         zombieSpawn[0][0]=12;
         zombieSpawn[0][1]=18;
@@ -134,13 +141,79 @@ public class Game extends BasicGameState {
     }
     time+=delta;
     if(time>=500){
-        if(zombieY.get(0)<20){
-            zombieY.set(0,zombieY.get(0)+1);
-        }
+        moveOut();
         int randomInt = randomGenerator.nextInt(3);
-        zombieX.set(0,zombieSpawn[randomInt][0]);
-        zombieY.set(0,zombieSpawn[randomInt][1]);
-        randomInt=0;
+        System.out.println("randomInt: "+randomInt);
+        
+        //Spawning
+        
+        //Up
+        if(position[randomInt]==1){
+            test=0;
+            for(int i=0;i<zombieX.size();i++){
+                if(zombieX.get(i)==zombieSpawn[randomInt][0] && (zombieY.get(i)==zombieSpawn[randomInt][1] || zombieY.get(i)==zombieSpawn[randomInt][1]-1)){
+                        test=1;
+                        break;
+                }
+            }
+            if(test==0){
+                zombieX.add(zombieSpawn[randomInt][0]);
+                zombieY.add(zombieSpawn[randomInt][1]);
+                toMove.add(true);
+                moveC.add(0);
+            }
+        }
+        
+        //Down
+        if(position[randomInt]==2){
+            test=0;
+            for(int i=0;i<zombieX.size();i++){
+                if(zombieX.get(i)==zombieSpawn[randomInt][0] && (zombieY.get(i)==zombieSpawn[randomInt][1] || zombieY.get(i)==zombieSpawn[randomInt][1]+1)){
+                        test=1;
+                        break;
+                }
+            }
+            if(test==0){
+                zombieX.add(zombieSpawn[randomInt][0]);
+                zombieY.add(zombieSpawn[randomInt][1]);
+                toMove.add(true);
+                moveC.add(0);
+            }
+        }
+        
+        //Left
+        if(position[randomInt]==3){
+            test=0;
+            for(int i=0;i<zombieX.size();i++){
+                if(zombieY.get(i)==zombieSpawn[randomInt][1] && (zombieX.get(i)==zombieSpawn[randomInt][0] || zombieX.get(i)==zombieSpawn[randomInt][0]-1)){
+                        test=1;
+                        break;
+                }
+            }
+            if(test==0){
+                zombieX.add(zombieSpawn[randomInt][0]);
+                zombieY.add(zombieSpawn[randomInt][1]);
+                toMove.add(true);
+                moveC.add(0);
+            }
+        }
+        
+        //Right
+        if(position[randomInt]==2){
+            test=0;
+            for(int i=0;i<zombieX.size();i++){
+                if(zombieY.get(i)==zombieSpawn[randomInt][1] && (zombieX.get(i)==zombieSpawn[randomInt][0] || zombieX.get(i)==zombieSpawn[randomInt][0]+1)){
+                        test=1;
+                        break;
+                }
+            }
+            if(test==0){
+                zombieX.add(zombieSpawn[randomInt][0]);
+                zombieY.add(zombieSpawn[randomInt][1]);
+                toMove.add(true);
+                moveC.add(0);
+            }
+        }
         
 
         
@@ -266,10 +339,27 @@ public class Game extends BasicGameState {
     
      
      
-     System.out.println(x2);
-     System.out.println(y2);
-     
+//     System.out.println("x: "+zombieX.get(0));
+//     System.out.println("y: "+zombieY.get(0));
+//     System.out.println("Zombie Spawn X: "+zombieSpawn[0][0]);
+//     System.out.println("Zombie Spawn Y: "+zombieSpawn[0][1]);
+//     
      }
+    
+    public void moveOut(){
+        if(time>=500){
+            for(int i=0;i<toMove.size();i++){
+                if(toMove.get(i)==true&&moveC.get(i)<2){
+                    moveC.set(i,moveC.get(i)+1);
+                    zombieX.set(i,zombieX.get(i)+1);
+                    zombieY.set(i,zombieY.get(i)+1);
+                    if(moveC.get(i)==2){
+                        toMove.set(i,true);
+                    }
+                }
+            }
+        }
+    }
      
       public int getID(){
         return 3;
