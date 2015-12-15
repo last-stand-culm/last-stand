@@ -12,6 +12,8 @@ public class Game extends BasicGameState {
     public static int score=0,round=0,kills=0,money=10000,ammo;
     private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41;
     
+    private Animation a;
+    
     public static String weapon=" ";
     
     private TiledMap map;
@@ -42,6 +44,23 @@ public class Game extends BasicGameState {
     public Game(int state){
         
     }
+    //base code for all animation
+//    public Animation getAnimation ( Image i , int spritesX, int spritesY , int spriteWidth , int spriteHeight, int frames, int duration )
+//	{
+//		Animation a = new Animation(false);
+//		
+//		int c = 0;
+//		for( int y = 0 ; y < spritesY; y++)
+//		{
+//			for( int x = 0 ; x < spritesX; x++)
+//			{
+//				if( c < frames ) a.addFrame( i.getSubImage(x*spriteWidth, y*spriteHeight, spriteWidth, spriteHeight), duration);
+//				c++;
+//			}
+//		}
+//		
+//		return a;
+//	}
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
     map=new TiledMap("res/map_game.tmx");
@@ -51,6 +70,8 @@ public class Game extends BasicGameState {
     doorDown=new Image("res/door_for_game_down (1).png");
     doorRight=new Image("res/door_for_game_right (1).png");
     doorLeft=new Image("res/door_for_game_left (1).png");
+   // Image i = new Image("res/zombie_animation.png");
+   // a = getAnimation ( i, 8 , 1 , 45, 52, 32, 150 );
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
@@ -67,6 +88,7 @@ public class Game extends BasicGameState {
     if(heart3==true){heart.draw(950, 20);}
     chestClosed.draw(x*32+1408,y*32+1760);
     g.fillRect(480, 416, 32, 32);
+   // a.draw(300, 400);
     
     if(door1Open==false){ //rendering botton door in main room
         doorUp.draw(x*32+480,y*32+1088);
@@ -117,6 +139,8 @@ public class Game extends BasicGameState {
      
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      int objectLayer = map.getLayerIndex("Tile Layer 1");
+     
+    // a.update(delta);
      
      //getting the zombie to come out of its spawn and zombie spawning
     if(!start){
