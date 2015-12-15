@@ -12,7 +12,7 @@ public class Game extends BasicGameState {
     public static int score=0,round=0,kills=0,money=10000,ammo;
     private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41;
     
-    private Animation a;
+    private Animation zombieWalkingUp,zombieWalkingLeft;
     
     public static String weapon=" ";
     
@@ -30,6 +30,7 @@ public class Game extends BasicGameState {
     private ArrayList<Integer> zombieX = new ArrayList();
     private ArrayList<Integer> zombieY = new ArrayList();
     private ArrayList<Integer> moveC = new ArrayList();
+    private ArrayList<Integer> pos = new ArrayList();
     
     private ArrayList<Boolean> toMove = new ArrayList();
     
@@ -37,7 +38,7 @@ public class Game extends BasicGameState {
     private int[] position=new int[3];
     
     
-    private int time=0,test=0;
+    private int time=0,test=0,cap=10;
     
     Random randomGenerator = new Random();
             
@@ -45,22 +46,22 @@ public class Game extends BasicGameState {
         
     }
     //base code for all animation
-//    public Animation getAnimation ( Image i , int spritesX, int spritesY , int spriteWidth , int spriteHeight, int frames, int duration )
-//	{
-//		Animation a = new Animation(false);
-//		
-//		int c = 0;
-//		for( int y = 0 ; y < spritesY; y++)
-//		{
-//			for( int x = 0 ; x < spritesX; x++)
-//			{
-//				if( c < frames ) a.addFrame( i.getSubImage(x*spriteWidth, y*spriteHeight, spriteWidth, spriteHeight), duration);
-//				c++;
-//			}
-//		}
-//		
-//		return a;
-//	}
+    public Animation getAnimation ( Image i , int spritesX, int spritesY , int spriteWidth , int spriteHeight, int frames, int duration )
+	{
+		Animation a = new Animation(false);
+		
+		int c = 0;
+		for( int y = 0 ; y < spritesY; y++)
+		{
+			for( int x = 0 ; x < spritesX; x++)
+			{
+				if( c < frames ) a.addFrame( i.getSubImage(x*spriteWidth, y*spriteHeight, spriteWidth, spriteHeight), duration);
+				c++;
+			}
+		}
+		
+		return a;
+	}
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
     map=new TiledMap("res/map_game.tmx");
@@ -70,8 +71,10 @@ public class Game extends BasicGameState {
     doorDown=new Image("res/door_for_game_down (1).png");
     doorRight=new Image("res/door_for_game_right (1).png");
     doorLeft=new Image("res/door_for_game_left (1).png");
-   // Image i = new Image("res/zombie_animation.png");
-   // a = getAnimation ( i, 8 , 1 , 45, 52, 32, 150 );
+    Image zombieWalking = new Image("res/zombie_animation.png");
+    Image zombieWalkingL=new Image("res/zombie_animation_left.png");
+    zombieWalkingUp = getAnimation ( zombieWalking, 8 , 1 , 45, 52, 54, 100 );
+    zombieWalkingLeft= getAnimation( zombieWalkingL, 1 , 8 , 52 , 45 , 54 , 100);
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
@@ -88,7 +91,7 @@ public class Game extends BasicGameState {
     if(heart3==true){heart.draw(950, 20);}
     chestClosed.draw(x*32+1408,y*32+1760);
     g.fillRect(480, 416, 32, 32);
-   // a.draw(300, 400);
+    
     
     if(door1Open==false){ //rendering botton door in main room
         doorUp.draw(x*32+480,y*32+1088);
@@ -128,19 +131,40 @@ public class Game extends BasicGameState {
         doorRight.draw(x*32+2016,y*32+1760);
     }
     if(buyDoor==true){g.drawString("$750 (E)", 464, 400);}
+    
     g.setColor(Color.red);
-    for(int i=0;i<zombieX.size();i++){
-         g.fillRect(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
+    
+    for(int i=0;i<pos.size();i++){
+        if(pos.get(i)==1){
+            for(int j=0;j<zombieX.size();j++){
+                zombieWalkingUp.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
+            }
+        }
+//        if(pos.get(i)==2){
+//            for(int j=0;j<zombieX.size();j++){
+//                zombieWalkingD.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
+//            }
+//        }
+        if(pos.get(i)==3){
+            for(int j=0;j<zombieX.size();j++){
+                zombieWalkingLeft.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
+            }
+        }
+//        if(pos.get(i)==1){
+//            for(int j=0;j<zombieX.size();j++){
+//                zombieWalkingUp.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
+//            }
+//        }
     }
-//    if(zombieX.size()>=2){g.fillRect(x*32+zombieX.get(1)*32,y*32+zombieY.get(1)*32,32,32);}
-   // g.fillRect(x*32+736,y*32+576,32,32);
-   // g.fillRect(x*32+896,y*32+992,32,32);
+    
+
      }
      
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      int objectLayer = map.getLayerIndex("Tile Layer 1");
      
-    // a.update(delta);
+      zombieWalkingUp.update(delta);
+      zombieWalkingLeft.update(delta);
      
      //getting the zombie to come out of its spawn and zombie spawning
     if(!start){
@@ -154,6 +178,7 @@ public class Game extends BasicGameState {
         zombieY.add(18);
         toMove.add(true);
         moveC.add(0);
+        pos.add(2);
         start=true;
         zombieSpawn[0][0]=12;
         zombieSpawn[0][1]=18;
@@ -167,11 +192,11 @@ public class Game extends BasicGameState {
     if(time>=500){
         moveOut();
         int randomInt = randomGenerator.nextInt(3);
-        System.out.println("randomInt: "+randomInt);
+        System.out.println("zombieX.size(): "+zombieX.size());
         
         //Spawning
         
-        //Up
+        //if zombie spawn is Up
         if(position[randomInt]==1){
             test=0;
             for(int i=0;i<zombieX.size();i++){
@@ -180,15 +205,16 @@ public class Game extends BasicGameState {
                         break;
                 }
             }
-            if(test==0){
+            if(test==0&&zombieX.size()<cap){
                 zombieX.add(zombieSpawn[randomInt][0]);
                 zombieY.add(zombieSpawn[randomInt][1]);
                 toMove.add(true);
                 moveC.add(0);
+                pos.add(1);
             }
         }
         
-        //Down
+        //if zombie spawn is Down
         if(position[randomInt]==2){
             test=0;
             for(int i=0;i<zombieX.size();i++){
@@ -197,15 +223,16 @@ public class Game extends BasicGameState {
                         break;
                 }
             }
-            if(test==0){
+            if(test==0&&zombieX.size()<cap){
                 zombieX.add(zombieSpawn[randomInt][0]);
                 zombieY.add(zombieSpawn[randomInt][1]);
                 toMove.add(true);
                 moveC.add(0);
+                pos.add(2);
             }
         }
         
-        //Left
+        //if zombie spawn is Left
         if(position[randomInt]==3){
             test=0;
             for(int i=0;i<zombieX.size();i++){
@@ -214,16 +241,17 @@ public class Game extends BasicGameState {
                         break;
                 }
             }
-            if(test==0){
+            if(test==0&&zombieX.size()<cap){
                 zombieX.add(zombieSpawn[randomInt][0]);
                 zombieY.add(zombieSpawn[randomInt][1]);
                 toMove.add(true);
                 moveC.add(0);
+                pos.add(3);
             }
         }
         
-        //Right
-        if(position[randomInt]==2){
+        //if zombie spawn is Right
+        if(position[randomInt]==4){
             test=0;
             for(int i=0;i<zombieX.size();i++){
                 if(zombieY.get(i)==zombieSpawn[randomInt][1] && (zombieX.get(i)==zombieSpawn[randomInt][0] || zombieX.get(i)==zombieSpawn[randomInt][0]+1)){
@@ -231,17 +259,19 @@ public class Game extends BasicGameState {
                         break;
                 }
             }
-            if(test==0){
+            if(test==0&&zombieX.size()<cap){
                 zombieX.add(zombieSpawn[randomInt][0]);
                 zombieY.add(zombieSpawn[randomInt][1]);
                 toMove.add(true);
                 moveC.add(0);
+                pos.add(4);
             }
         }
         
 
         
         time=0;
+        
     }
     
      //to move right and checking for doors
@@ -370,15 +400,29 @@ public class Game extends BasicGameState {
 //     
      }
     
+    //base code for zombie spawning and moving out
     public void moveOut(){
         if(time>=500){
             for(int i=0;i<toMove.size();i++){
                 if(toMove.get(i)==true&&moveC.get(i)<2){
-                    moveC.set(i,moveC.get(i)+1);
-                    zombieX.set(i,zombieX.get(i)+1);
-                    zombieY.set(i,zombieY.get(i)+1);
+                    if(pos.get(i)==1){
+                        moveC.set(i,moveC.get(i)+1);
+                        zombieY.set(i,zombieY.get(i)-1);
+                    }
+                    if(pos.get(i)==2){
+                        moveC.set(i,moveC.get(i)+1);
+                        zombieY.set(i,zombieY.get(i)+1);
+                    }
+                    if(pos.get(i)==3){
+                        moveC.set(i,moveC.get(i)+1);
+                        zombieX.set(i,zombieX.get(i)-1);
+                    }
+                    if(pos.get(i)==4){
+                        moveC.set(i,moveC.get(i)+1);
+                        zombieX.set(i,zombieX.get(i)+1);
+                    }
                     if(moveC.get(i)==2){
-                        toMove.set(i,true);
+                        toMove.set(i,false);
                     }
                 }
             }
