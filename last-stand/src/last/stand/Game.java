@@ -12,7 +12,8 @@ public class Game extends BasicGameState {
     public static int score=0,round=0,kills=0,money=10000,ammo;
     private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41;
     
-    private Animation zombieWalkingUp,zombieWalkingLeft;
+    private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
+    private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
     
     public static String weapon=" ";
     
@@ -73,8 +74,23 @@ public class Game extends BasicGameState {
     doorLeft=new Image("res/door_for_game_left (1).png");
     Image zombieWalking = new Image("res/zombie_animation.png");
     Image zombieWalkingL=new Image("res/zombie_animation_left.png");
+    Image zombieWalkingR = new Image("res/zombie_animation_right.png");
+    Image zombieWalkingD=new Image("res/zombie_animation_down.png");
+    Image playerWalkingU = new Image("res/player_walking_up.png");
+   // Image playerWalkingL=new Image("res/player_walking_left.png");
+   // Image playerWalkingR = new Image("res/player_walking_right.png");
+   // Image playerWalkingD=new Image("res/player_walking_down.png");
     zombieWalkingUp = getAnimation ( zombieWalking, 8 , 1 , 45, 52, 54, 100 );
     zombieWalkingLeft= getAnimation( zombieWalkingL, 1 , 8 , 52 , 45 , 54 , 100);
+    zombieWalkingRight= getAnimation( zombieWalkingR, 1 , 8 , 52 , 45 , 54 , 100);
+    zombieWalkingDown= getAnimation( zombieWalkingD, 8 , 1 , 45 , 52 , 54 , 100);
+    playerWalkingUp=getAnimation(playerWalkingU , 8 , 1 , 36 , 59 , 54 , 100);
+   // playerWalkingLeft=getAnimation(playerWalkingL , 1 , 8 , 45 , 52 , 54 , 100);
+   // playerWalkingRight=getAnimation(playerWalkingR , 1 , 8 , 45 , 52 , 54 , 100);
+  //  playerWalkingDown=getAnimation(playerWalkingD , 8 , 1 , 45 , 52 , 54 , 100);
+    
+    
+    
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
@@ -90,7 +106,7 @@ public class Game extends BasicGameState {
     if(heart2==true){heart.draw(900, 20);}
     if(heart3==true){heart.draw(950, 20);}
     chestClosed.draw(x*32+1408,y*32+1760);
-    g.fillRect(480, 416, 32, 32);
+    playerWalkingUp.draw(480, 416, 32, 32);
     
     
     if(door1Open==false){ //rendering botton door in main room
@@ -136,25 +152,17 @@ public class Game extends BasicGameState {
     
     for(int i=0;i<pos.size();i++){
         if(pos.get(i)==1){
-            for(int j=0;j<zombieX.size();j++){
-                zombieWalkingUp.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
-            }
+            zombieWalkingUp.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
         }
-//        if(pos.get(i)==2){
-//            for(int j=0;j<zombieX.size();j++){
-//                zombieWalkingD.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
-//            }
-//        }
+        if(pos.get(i)==2){
+            zombieWalkingDown.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
+        }
         if(pos.get(i)==3){
-            for(int j=0;j<zombieX.size();j++){
-                zombieWalkingLeft.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
-            }
+            zombieWalkingLeft.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
         }
-//        if(pos.get(i)==1){
-//            for(int j=0;j<zombieX.size();j++){
-//                zombieWalkingUp.draw(x*32+zombieX.get(j)*32,y*32+zombieY.get(j)*32,32,32);
-//            }
-//        }
+        if(pos.get(i)==4){
+            zombieWalkingRight.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
+        }
     }
     
 
@@ -165,6 +173,12 @@ public class Game extends BasicGameState {
      
       zombieWalkingUp.update(delta);
       zombieWalkingLeft.update(delta);
+      zombieWalkingDown.update(delta);
+      zombieWalkingRight.update(delta);
+      playerWalkingUp.update(delta);
+    //  playerWalkingLeft.update(delta);
+     // playerWalkingRight.update(delta);
+     // playerWalkingDown.update(delta);
      
      //getting the zombie to come out of its spawn and zombie spawning
     if(!start){
@@ -192,7 +206,8 @@ public class Game extends BasicGameState {
     if(time>=500){
         moveOut();
         int randomInt = randomGenerator.nextInt(3);
-        System.out.println("zombieX.size(): "+zombieX.size());
+        for(int i=0;i<pos.size();i++){
+        }
         
         //Spawning
         
@@ -393,11 +408,9 @@ public class Game extends BasicGameState {
     
      
      
-//     System.out.println("x: "+zombieX.get(0));
-//     System.out.println("y: "+zombieY.get(0));
-//     System.out.println("Zombie Spawn X: "+zombieSpawn[0][0]);
-//     System.out.println("Zombie Spawn Y: "+zombieSpawn[0][1]);
-//     
+    System.out.println("x: "+x2);
+    System.out.println("y: "+y2);
+
      }
     
     //base code for zombie spawning and moving out
