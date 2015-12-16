@@ -15,7 +15,7 @@ public class Game extends BasicGameState {
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
     
-    public static String weapon=" ";
+    public static String weapon="Pistol ";
     
     private TiledMap map;
     
@@ -25,7 +25,7 @@ public class Game extends BasicGameState {
     
     private boolean heart1=true,heart2=true,heart3=true;
     private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
-    private boolean buyDoor=false;
+    private boolean buyDoor=false,buyChest=true;
     private boolean start=false;
     
     private ArrayList<Integer> zombieX = new ArrayList();
@@ -39,7 +39,7 @@ public class Game extends BasicGameState {
     private int[] position=new int[3];
     
     
-    private int time=0,test=0,cap=10;
+    private int time=0,test=0,cap=10,playerMovement=1;
     
     Random randomGenerator = new Random();
             
@@ -77,17 +77,17 @@ public class Game extends BasicGameState {
     Image zombieWalkingR = new Image("res/zombie_animation_right.png");
     Image zombieWalkingD=new Image("res/zombie_animation_down.png");
     Image playerWalkingU = new Image("res/player_walking_up.png");
-   // Image playerWalkingL=new Image("res/player_walking_left.png");
-   // Image playerWalkingR = new Image("res/player_walking_right.png");
-   // Image playerWalkingD=new Image("res/player_walking_down.png");
+    Image playerWalkingL=new Image("res/player_walking_left.png");
+    Image playerWalkingR = new Image("res/player_walking_right.png");
+    Image playerWalkingD=new Image("res/player_walking_down.png");
     zombieWalkingUp = getAnimation ( zombieWalking, 8 , 1 , 45, 52, 54, 100 );
     zombieWalkingLeft= getAnimation( zombieWalkingL, 1 , 8 , 52 , 45 , 54 , 100);
     zombieWalkingRight= getAnimation( zombieWalkingR, 1 , 8 , 52 , 45 , 54 , 100);
     zombieWalkingDown= getAnimation( zombieWalkingD, 8 , 1 , 45 , 52 , 54 , 100);
     playerWalkingUp=getAnimation(playerWalkingU , 8 , 1 , 36 , 59 , 54 , 100);
-   // playerWalkingLeft=getAnimation(playerWalkingL , 1 , 8 , 45 , 52 , 54 , 100);
-   // playerWalkingRight=getAnimation(playerWalkingR , 1 , 8 , 45 , 52 , 54 , 100);
-  //  playerWalkingDown=getAnimation(playerWalkingD , 8 , 1 , 45 , 52 , 54 , 100);
+    playerWalkingLeft=getAnimation(playerWalkingL , 1 , 8 , 59 , 36 , 54 , 100);
+    playerWalkingRight=getAnimation(playerWalkingR , 1 , 8 , 59 , 36 , 54 , 100);
+    playerWalkingDown=getAnimation(playerWalkingD , 8 , 1 , 36 , 59 , 54 , 100);
     
     
     
@@ -106,7 +106,19 @@ public class Game extends BasicGameState {
     if(heart2==true){heart.draw(900, 20);}
     if(heart3==true){heart.draw(950, 20);}
     chestClosed.draw(x*32+1408,y*32+1760);
-    playerWalkingUp.draw(480, 416, 32, 32);
+    //up=1 down=2 left=3 right=4
+   if(playerMovement==1){
+      playerWalkingUp.draw(480, 416, 32, 32); 
+   }
+   if(playerMovement==2){
+      playerWalkingDown.draw(480, 416, 32, 32); 
+   }
+   if(playerMovement==3){
+      playerWalkingLeft.draw(480, 416, 32, 32); 
+   }
+   if(playerMovement==4){
+      playerWalkingRight.draw(480, 416, 32, 32); 
+   }
     
     
     if(door1Open==false){ //rendering botton door in main room
@@ -147,6 +159,9 @@ public class Game extends BasicGameState {
         doorRight.draw(x*32+2016,y*32+1760);
     }
     if(buyDoor==true){g.drawString("$750 (E)", 464, 400);}
+    if(buyChest==false ){
+     g.drawString("$950 (E)", 464, 400);
+    }
     
     g.setColor(Color.red);
     
@@ -176,9 +191,9 @@ public class Game extends BasicGameState {
       zombieWalkingDown.update(delta);
       zombieWalkingRight.update(delta);
       playerWalkingUp.update(delta);
-    //  playerWalkingLeft.update(delta);
-     // playerWalkingRight.update(delta);
-     // playerWalkingDown.update(delta);
+      playerWalkingLeft.update(delta);
+      playerWalkingRight.update(delta);
+      playerWalkingDown.update(delta);
      
      //getting the zombie to come out of its spawn and zombie spawning
     if(!start){
@@ -315,10 +330,18 @@ public class Game extends BasicGameState {
          if(map.getTileId(x2+1,y2,objectLayer)==0){
             x--;
             x2++;
+            playerMovement=4;
             buyDoor=false;
          }
      }
-     //to move up and checking for doors
+     //to move up and checking for doors/box
+     if((x2==44 && y2==56) || (x2==45 && y2==56)){
+         buyChest=false;
+     }
+     else {
+         buyChest=true;
+     }
+     
      if(((x2==15&&y2==35)||(x2==16&&y2==35)||(x2==17&&y2==35)||(x2==18&&y2==35))&&!door1Open){
          buyDoor=true;
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
@@ -344,6 +367,7 @@ public class Game extends BasicGameState {
          if(map.getTileId(x2,y2-1,objectLayer)==0 ){
             y++;
             y2--;
+            playerMovement=1;
             buyDoor=false;
          }
      }
@@ -373,6 +397,7 @@ public class Game extends BasicGameState {
          if(map.getTileId(x2-1,y2,objectLayer)==0){
             x++;
             x2--;
+            playerMovement=3;
             buyDoor=false;
          }
      }
@@ -402,6 +427,7 @@ public class Game extends BasicGameState {
         if(map.getTileId(x2,y2+1,objectLayer)==0){
             y--;
             y2++;
+            playerMovement=2;
             buyDoor=false;
         }
     }
