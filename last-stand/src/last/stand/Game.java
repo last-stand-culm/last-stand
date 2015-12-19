@@ -22,11 +22,14 @@ public class Game extends BasicGameState {
     private Image heart;
     private Image chestClosed;
     private Image doorUp,doorDown,doorRight,doorLeft;
+    private Image box_Open2;
     
     private boolean heart1=true,heart2=true,heart3=true;
     private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
-    private boolean buyDoor=false,buyChest=true;
+    private boolean buyDoor=false,buyChest=false;
     private boolean start=false;
+    private boolean boxOpen2=false;
+    private boolean m4a1=false,ump=false,nova=false,p250=true;
     
     private ArrayList<Integer> zombieX = new ArrayList();
     private ArrayList<Integer> zombieY = new ArrayList();
@@ -72,6 +75,7 @@ public class Game extends BasicGameState {
     doorDown=new Image("res/door_for_game_down (1).png");
     doorRight=new Image("res/door_for_game_right (1).png");
     doorLeft=new Image("res/door_for_game_left (1).png");
+    box_Open2=new Image("res/box_open.png");
     Image zombieWalking = new Image("res/zombie_animation.png");
     Image zombieWalkingL=new Image("res/zombie_animation_left.png");
     Image zombieWalkingR = new Image("res/zombie_animation_right.png");
@@ -119,7 +123,34 @@ public class Game extends BasicGameState {
    if(playerMovement==4){
       playerWalkingRight.draw(480, 416, 32, 32); 
    }
-    
+//   if(buyChest==true && gc.getInput().isKeyPressed(Input.KEY_E ) && money>=950 ){
+//       money-=950;
+//       boxOpen2=true;
+   //}
+   // when buying the chest
+//    if(boxOpen2==true){
+//        box_Open2.draw(x*32+1408,y*32+1760);
+//        buyChest=false;
+//       Random boxGen =new Random();
+//       int weaponselc;
+//        weaponselc=boxGen.nextInt(3);
+//        
+//       for(int i=0;i<1;i++){
+//            if(weaponselc==0){
+//                 g.drawString("m4a1", 464, 398);
+//            }
+//            if(weaponselc==1){
+//                 g.drawString("UMP", 464, 398);
+//            }
+//            if(weaponselc==2){
+//                 g.drawString("nova", 464, 398);
+//            }
+//            
+//       }
+//        if((x2==44 && y2==56) || (x2==45 && y2==56)&& buyChest==false)
+//        g.drawString("pick up(E)", 464, 398);
+//        
+//    }
     
     if(door1Open==false){ //rendering botton door in main room
         doorUp.draw(x*32+480,y*32+1088);
@@ -159,7 +190,7 @@ public class Game extends BasicGameState {
         doorRight.draw(x*32+2016,y*32+1760);
     }
     if(buyDoor==true){g.drawString("$750 (E)", 464, 400);}
-    if(buyChest==false ){
+    if(buyChest==true ){
      g.drawString("$950 (E)", 464, 400);
     }
     
@@ -186,6 +217,7 @@ public class Game extends BasicGameState {
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      int objectLayer = map.getLayerIndex("Tile Layer 1");
      
+     //update for animations
       zombieWalkingUp.update(delta);
       zombieWalkingLeft.update(delta);
       zombieWalkingDown.update(delta);
@@ -223,9 +255,7 @@ public class Game extends BasicGameState {
         int randomInt = randomGenerator.nextInt(3);
         for(int i=0;i<pos.size();i++){
         }
-        
-        //Spawning
-        
+           
         //if zombie spawn is Up
         if(position[randomInt]==1){
             test=0;
@@ -336,10 +366,10 @@ public class Game extends BasicGameState {
      }
      //to move up and checking for doors/box
      if((x2==44 && y2==56) || (x2==45 && y2==56)){
-         buyChest=false;
+         buyChest=true;
      }
      else {
-         buyChest=true;
+         buyChest=false;
      }
      
      if(((x2==15&&y2==35)||(x2==16&&y2==35)||(x2==17&&y2==35)||(x2==18&&y2==35))&&!door1Open){
