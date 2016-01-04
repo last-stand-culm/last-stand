@@ -10,7 +10,7 @@ import java.util.Random;
 public class Game extends BasicGameState {
     
     public static int score=0,round=0,kills=0,money=10000,ammo;
-    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41;
+    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
@@ -30,6 +30,7 @@ public class Game extends BasicGameState {
     private boolean start=false;
     private boolean boxOpen2=false;
     private boolean m4a1=false,ump=false,nova=false,p250=true;
+    private boolean boxStart=false;
     
     private ArrayList<Integer> zombieX = new ArrayList();
     private ArrayList<Integer> zombieY = new ArrayList();
@@ -123,34 +124,55 @@ public class Game extends BasicGameState {
    if(playerMovement==4){
       playerWalkingRight.draw(480, 416, 32, 32); 
    }
-//   if(buyChest==true && gc.getInput().isKeyPressed(Input.KEY_E ) && money>=950 ){
-//       money-=950;
-//       boxOpen2=true;
-   //}
-   // when buying the chest
-//    if(boxOpen2==true){
-//        box_Open2.draw(x*32+1408,y*32+1760);
-//        buyChest=false;
-//       Random boxGen =new Random();
-//       int weaponselc;
-//        weaponselc=boxGen.nextInt(3);
-//        
-//       for(int i=0;i<1;i++){
-//            if(weaponselc==0){
-//                 g.drawString("m4a1", 464, 398);
-//            }
-//            if(weaponselc==1){
-//                 g.drawString("UMP", 464, 398);
-//            }
-//            if(weaponselc==2){
-//                 g.drawString("nova", 464, 398);
-//            }
-//            
-//       }
-//        if((x2==44 && y2==56) || (x2==45 && y2==56)&& buyChest==false)
-//        g.drawString("pick up(E)", 464, 398);
-//        
-//    }
+   if(buyChest==true && gc.getInput().isKeyPressed(Input.KEY_E ) && money>=950 ){
+       money-=950;
+       boxOpen2=true;
+       boxStart=true;
+   }
+    //when buying the chest
+    if(boxOpen2==true){
+        
+        box_Open2.draw(x*32+1408,y*32+1760);
+        buyChest=false;
+        if(!boxStart&&bCount<40){
+            bCount++;
+        }
+        if(!boxStart&&bCount>=40){
+            boxOpen2=false;
+            if(weaponselc==0){
+                 weapon="m4a1";
+            }
+            if(weaponselc==1){
+                 weapon="UMP";
+            }
+            if(weaponselc==2){
+                 weapon="nova";
+            }
+        }
+        if(boxStart){
+            bCount=0;
+            boxStart=false;
+        }
+       Random boxGen =new Random();
+       
+        weaponselc=boxGen.nextInt(3);
+        System.out.println("bCount: "+bCount);
+       
+            if(weaponselc==0){
+                 g.drawString("m4a1", 464, 398);
+            }
+            if(weaponselc==1){
+                 g.drawString("UMP", 464, 398);
+            }
+            if(weaponselc==2){
+                 g.drawString("nova", 464, 398);
+            }
+            
+       
+        if((x2==44 && y2==56) || (x2==45 && y2==56)&& buyChest==false)
+        g.drawString("pick up(E)", 464, 398);
+        
+    }
     
     if(door1Open==false){ //rendering botton door in main room
         doorUp.draw(x*32+480,y*32+1088);
