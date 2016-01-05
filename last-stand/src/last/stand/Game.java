@@ -10,7 +10,7 @@ import java.util.Random;
 public class Game extends BasicGameState {
     
     public static int score=0,round=0,kills=0,money=10000,ammo;
-    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0;
+    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0,g=0,h=0,f=0,fCLow=12;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
@@ -41,6 +41,12 @@ public class Game extends BasicGameState {
     
     private int[][] zombieSpawn=new int[3][2];
     private int[] position=new int[3];
+    private int[][] grid = new int[100][100];
+    private int[][] open = new int[100][100];
+    private int[][] closed = new int[100][100];
+    private int[][] gCost = new int[100][100];
+    private int[][] fCost = new int[100][100];
+    private int[][] hCost = new int[100][100];
     
     
     private int time=0,test=0,cap=10,playerMovement=1;
@@ -255,12 +261,10 @@ public class Game extends BasicGameState {
         position[0]=2;
         position[1]=2;
         position[2]=3;
-        
-        
         zombieX.add(12);
-        zombieY.add(18);
-        toMove.add(true);
-        moveC.add(0);
+        zombieY.add(20);
+        toMove.add(false);
+        moveC.add(2);
         pos.add(2);
         start=true;
         zombieSpawn[0][0]=12;
@@ -269,6 +273,30 @@ public class Game extends BasicGameState {
         zombieSpawn[1][1]=18;
         zombieSpawn[2][0]=28;
         zombieSpawn[2][1]=31;
+        for(int i=0;i<100;i++){
+            for(int j=0;j<100;j++){
+                if(map.getTileId(j,i,objectLayer)==0){
+                    grid[j][i]=0;
+                }
+                else grid[j][i]=1;
+                open[j][i]=0;
+                closed[j][i]=0;
+            }
+        }
+        
+        open[12][20]=1;
+        gCost[12][20]=0;
+        hCost[12][20]=x2-zombieX.get(0)+y2-zombieY.get(0);
+        System.out.println(hCost[12][20]);
+        if(hCost[12][20]<0)hCost[12][20]*=-1;
+//        grid[15][34]=1;
+//        grid[16][34]=1;
+//        grid[17][34]=1;
+//        grid[18][34]=1;
+//        grid[26][23]=1;
+//        grid[26][24]=1;
+//        grid[26][25]=1;
+//        grid[26][26]=1;
         
     }
     time+=delta;
@@ -283,8 +311,8 @@ public class Game extends BasicGameState {
             test=0;
             for(int i=0;i<zombieX.size();i++){
                 if(zombieX.get(i)==zombieSpawn[randomInt][0] && (zombieY.get(i)==zombieSpawn[randomInt][1] || zombieY.get(i)==zombieSpawn[randomInt][1]-1)){
-                        test=1;
-                        break;
+                    test=1;
+                    break;
                 }
             }
             if(test==0&&zombieX.size()<cap){
@@ -351,7 +379,19 @@ public class Game extends BasicGameState {
         }
         
 
-        
+        while(true){
+            for(int i=0;i<100;i++){
+                for(int j=0;j<100;j++){
+                    if(open[j][i]<fCLow)fCLow=open[j][i];
+                }
+            }
+            for(int i=0;i<100;i++){
+                for(int j=0;j<100;j++){
+                    
+                }
+            }
+            break;
+        }
         time=0;
         
     }
