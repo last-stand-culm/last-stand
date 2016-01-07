@@ -11,7 +11,7 @@ import java.util.Random;
 public class Game extends BasicGameState {
     
     public static int score=0,round=0,kills=0,money=10000,ammo;
-    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0;
+    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0,nextX,nextY;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
@@ -41,9 +41,10 @@ public class Game extends BasicGameState {
     private ArrayList<Boolean> toMove = new ArrayList();
     
     
-    private boolean[][] walkable = new boolean [100][100];
     private int[][] zombieSpawn=new int[3][2];
     private int[] position=new int[3];
+    
+    private boolean[][] drawPath = new boolean[100][100];
     
     
     private int time=0,test=0,cap=10,playerMovement=1;
@@ -103,6 +104,14 @@ public class Game extends BasicGameState {
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
     // rendering all images/strings to screen
+    for(int i=0;i<100;i++){
+        for(int j=0;j<100;j++){
+            if(drawPath[j][i]==true){
+                g.drawRect((x+j+(float).5)*32,(y+i+(float).5)*32,16,16);
+            }
+        }
+    }
+    
     map.render(x*32, y*32); 
     g.drawString("Score: "+score,25,25);
     g.drawString("Round: "+round,125,25);
@@ -159,7 +168,6 @@ public class Game extends BasicGameState {
        Random boxGen =new Random();
        
         weaponselc=boxGen.nextInt(3);
-        System.out.println("bCount: "+bCount);
        
             if(weaponselc==0){
                  g.drawString("m4a1", 464, 398);
@@ -270,7 +278,11 @@ public class Game extends BasicGameState {
         zombieSpawn[1][1]=18;
         zombieSpawn[2][0]=28;
         zombieSpawn[2][1]=31;
-        
+        for(int i=0;i<100;i++){
+            for(int j=0;j<100;j++){
+                drawPath[j][i]=false;
+            }
+        }
     }
     time+=delta;
     if(time>=500){
@@ -486,11 +498,9 @@ public class Game extends BasicGameState {
     }
     
      
-     
-    System.out.println("x: "+x2);
-    System.out.println("y: "+y2);
+    
 
-     }
+    }
     
     //base code for zombie spawning and moving out
     public void moveOut(){
@@ -522,13 +532,129 @@ public class Game extends BasicGameState {
     }
     
     public void findNext(int startX, int startY){
-        List<List<Boolean>> open = new ArrayList();
-        List<List<Integer>> hCost = new ArrayList();
-        open.add(new ArrayList<Boolean>());
+        ArrayList<Integer> openX = new ArrayList();
+        ArrayList<Integer> openY = new ArrayList();
+        ArrayList<Integer> closedX = new ArrayList();
+        ArrayList<Integer> closedY = new ArrayList();
         
-        hCost.add(new ArrayList<Integer>());
-        hCost.get(0).add(Math.abs(x2-startX)+Math.abs(y2-startY));
+        int[][] parentX = new int[100][100];
+        int[][] parentY = new int[100][100];
+        int[][] fCost = new int[100][100];
+        int[][] hCost = new int[100][100];
+        int[][] gCost = new int[100][100];
+        int[][] b = new int[4][2];
         
+        b[0][0]=0;
+        b[0][1]=-1;
+        b[1][0]=-1;
+        b[1][1]=0;
+        b[2][0]=1;
+        b[2][1]=0;
+        b[3][0]=0;
+        b[3][1]=1;
+        
+        boolean[][] walkable = new boolean[100][100];
+        
+        int objectLayer = map.getLayerIndex("Tile Layer 1");
+        int currentX = startX, currentY = startY;
+        int fLow,hLow,fPos,hPos,pos=0,c;
+        
+        boolean nClosed=false,nOpen=false;
+        
+        for(int i=0;i<100;i++){
+            for(int j=0;j<100;j++){
+                walkable[j][i]=true;
+                for(int k=0;k<zombieX.size();k++){
+                    if(zombieX.get(k)==j&&zombieY.get(k)==i)walkable[j][i]=false;
+                }
+                if(map.getTileId(j,i,objectLayer)==1){
+                    walkable[j][i]=false;
+                }
+                hCost[j][i]=Math.abs(x2-j)+Math.abs(y2-i);
+            }
+        }
+        fCost[startX][startY]=hCost[startX][startY];
+        gCost[startX][startY]=0;
+        parentX[startX][startY]=startX;
+        parentY[startX][startY]=startY;
+        openX.add(startX);
+        openY.add(startY);
+        
+        while(true){
+            fLow=200;
+            hLow=200;
+            c=0;
+            for(int i=0;i<openX.size();i++){
+                if(fCost[openX.get(i)][openY.get(i)]<=fLow){
+                    fLow=fCost[openX.get(i)][openY.get(i)];
+                    fPos=i;
+                    c++;
+                    pos=i;
+                }
+            }
+            if(c>1){
+                for(int i=0;i<openX.size();i++){
+                    if(fCost[openX.get(i)][openY.get(i)]==fLow){
+                        if(hCost[openX.get(i)][openY.get(i)]<hLow){
+                            hLow=hCost[openX.get(i)][openY.get(i)];
+                            hPos=i;
+                            pos=i;
+                        }
+                    }
+                }
+            }
+            currentX=openX.get(pos);
+            currentY=openY.get(pos);
+            openX.remove(pos);
+            openY.remove(pos);
+            closedX.add(currentX);
+            closedY.add(currentY);
+            
+            if(currentX==startX&&currentY==startY){
+                retrace(startX,startY,x2,y2,parentX,parentY);
+                return;
+            }
+            
+            
+            for(int h=0;h<4;h++){
+                nClosed=false;
+                nOpen=false;
+                for(int i=0;i<closedX.size();i++){
+                    if(closedX.get(i)==currentX&&closedY.get(i)==currentY-1){
+                        nClosed=true;
+                    }
+                }
+                if(walkable[currentX+b[h][0]][currentY+b[h][1]]&&!nClosed){
+                    for(int i=0;i<openX.size();i++){
+                        if(openX.get(i)==currentX&&openY.get(i)==currentY-1){
+                            nOpen=true;
+                        }
+                    }
+                    if(!nOpen){
+                        openX.add(currentX);
+                        openY.add(currentY);
+                        gCost[currentX+b[h][0]][currentY+b[h][1]]=gCost[currentX][currentY]+1;
+                        fCost[currentX+b[h][0]][currentY+b[h][1]]=gCost[currentX+b[h][0]][currentY+b[h][1]]+hCost[currentX+b[h][0]][currentY+b[h][1]];
+                    }
+                    if(nOpen&&gCost[currentX+b[h][0]][currentY+b[h][1]]<gCost[currentX][currentY]+1){
+                        gCost[currentX+b[h][0]][currentY+b[h][1]]=gCost[currentX][currentY]+1;
+                    }
+                }
+            }
+        }
+    }
+    
+    public void retrace(int sX, int sY, int cX, int cY, int[][] pX, int[][] pY){
+        if(pX[cX][cY]==sX&&pY[cX][cY]==sY){}
+        else{
+            drawPath[cX][cY]=true;
+            System.out.println("cX: "+cX);
+            System.out.println("cY: "+cY);
+            System.out.println("pX[cX][cY]: "+pX[cX][cY]);
+            System.out.println("pY[cX][cY]: "+pY[cX][cY]);
+            System.out.println("pX.length(): "+pX.length);
+            //retrace(sX,sY,pX[cX][cY],pY[cX][cY],pX,pY);
+        }
     }
      
     public int getID(){
