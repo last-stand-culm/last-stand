@@ -245,7 +245,7 @@ public class Game extends BasicGameState {
      
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      int objectLayer = map.getLayerIndex("Tile Layer 1");
-     
+     boolean moveable;
      //update for animations
       zombieWalkingUp.update(delta);
       zombieWalkingLeft.update(delta);
@@ -359,14 +359,24 @@ public class Game extends BasicGameState {
             }
         }
         
-        //for(int i=0;i<zombieX.size();i++){
-            findNext(zombieX.get(0),zombieY.get(0));
-            zombieX.set(0,nextX);
-            zombieY.set(0,nextY);
-        //}
+        for(int i=0;i<zombieX.size();i++){
+            if(!toMove.get(i)){
+                moveable = findNext(zombieX.get(i),zombieY.get(i),i);
+                if(moveable){
+                    zombieX.set(i,nextX);
+                    zombieY.set(i,nextY);
+                }
+                if(nextX==x2&&nextY==y2){
+                    zombieX.remove(i);
+                    zombieY.remove(i);
+                    moveC.remove(i);
+                    toMove.remove(i);
+                    pos.remove(i);
+                }
+            }
+        }
         
         
-        zombieY.set(0,nextY);
         time=0;
         
     }
@@ -533,7 +543,7 @@ public class Game extends BasicGameState {
         }
     }
     
-    public void findNext(int startX, int startY){
+    public boolean findNext(int startX, int startY, int zNum){
         ArrayList<Integer> openX = new ArrayList();
         ArrayList<Integer> openY = new ArrayList();
         ArrayList<Integer> closedX = new ArrayList();
@@ -559,7 +569,7 @@ public class Game extends BasicGameState {
         
         int objectLayer = map.getLayerIndex("Tile Layer 1");
         int currentX = startX, currentY = startY;
-        int fLow,hLow,pos=0,c,finalX=x2,finalY=y2;
+        int fLow,hLow,opos=0,c,finalX=x2,finalY=y2;
         
         boolean nClosed=false,nOpen=false;
         
@@ -567,7 +577,7 @@ public class Game extends BasicGameState {
             for(int j=0;j<100;j++){
                 walkable[j][i]=true;
                 for(int k=0;k<zombieX.size();k++){
-                    if(zombieX.get(k)==j&&zombieY.get(k)==i)walkable[j][i]=false;
+                    if(zombieX.get(k)==j&&zombieY.get(k)==i&&k!=zNum)walkable[j][i]=false;
                 }
                 if(map.getTileId(j,i,objectLayer)!=0){
                     walkable[j][i]=false;
@@ -598,7 +608,7 @@ public class Game extends BasicGameState {
                 if(fCost[openX.get(i)][openY.get(i)]<=fLow){
                     fLow=fCost[openX.get(i)][openY.get(i)];
                     c++;
-                    pos=i;
+                    opos=i;
                 }
             }
             if(c>1){
@@ -606,25 +616,27 @@ public class Game extends BasicGameState {
                     if(fCost[openX.get(i)][openY.get(i)]==fLow){
                         if(hCost[openX.get(i)][openY.get(i)]<hLow){
                             hLow=hCost[openX.get(i)][openY.get(i)];
-                            pos=i;
+                            opos=i;
                         }
                     }
                 }
             }
+            if(opos>=openX.size()){
+                return false;
+            }
             
             
-            
-            currentX=openX.get(pos);
-            currentY=openY.get(pos);
-            openX.remove(pos);
-            openY.remove(pos);
+            currentX=openX.get(opos);
+            currentY=openY.get(opos);
+            openX.remove(opos);
+            openY.remove(opos);
             
             closedX.add(currentX);
             closedY.add(currentY);
             
             if(currentX==finalX&&currentY==finalY){
                 retrace(startX,startY,finalX,finalY,parentX,parentY);
-                return;
+                return true;
             }
             
             
