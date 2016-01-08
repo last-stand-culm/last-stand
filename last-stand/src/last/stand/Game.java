@@ -104,19 +104,11 @@ public class Game extends BasicGameState {
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
     // rendering all images/strings to screen
-    for(int i=0;i<100;i++){
-        for(int j=0;j<100;j++){
-            if(drawPath[j][i]==true){
-                g.drawRect((x+j+(float).5)*32,(y+i+(float).5)*32,16,16);
-            }
-        }
-    }
-    g.setColor(Color.yellow);
-    
-    System.out.println(x+","+(y+20));
-    
     map.render(x*32, y*32); 
-    g.drawRect(x*32,(y+20)*32,32,32);
+    
+    
+    
+    
     g.drawString("Score: "+score,25,25);
     g.drawString("Round: "+round,125,25);
     g.drawString("Kills: "+kills,225,25);
@@ -367,8 +359,14 @@ public class Game extends BasicGameState {
             }
         }
         
-
-        findNext(zombieX.get(0),zombieY.get(0));
+        //for(int i=0;i<zombieX.size();i++){
+            findNext(zombieX.get(0),zombieY.get(0));
+            zombieX.set(0,nextX);
+            zombieY.set(0,nextY);
+        //}
+        
+        
+        zombieY.set(0,nextY);
         time=0;
         
     }
@@ -561,7 +559,7 @@ public class Game extends BasicGameState {
         
         int objectLayer = map.getLayerIndex("Tile Layer 1");
         int currentX = startX, currentY = startY;
-        int fLow,hLow,fPos,hPos,pos=0,c,finalX=x2,finalY=y2;
+        int fLow,hLow,pos=0,c,finalX=x2,finalY=y2;
         
         boolean nClosed=false,nOpen=false;
         
@@ -599,7 +597,6 @@ public class Game extends BasicGameState {
             for(int i=0;i<openX.size();i++){
                 if(fCost[openX.get(i)][openY.get(i)]<=fLow){
                     fLow=fCost[openX.get(i)][openY.get(i)];
-                    fPos=i;
                     c++;
                     pos=i;
                 }
@@ -609,17 +606,19 @@ public class Game extends BasicGameState {
                     if(fCost[openX.get(i)][openY.get(i)]==fLow){
                         if(hCost[openX.get(i)][openY.get(i)]<hLow){
                             hLow=hCost[openX.get(i)][openY.get(i)];
-                            hPos=i;
                             pos=i;
                         }
                     }
                 }
             }
             
+            
+            
             currentX=openX.get(pos);
             currentY=openY.get(pos);
             openX.remove(pos);
             openY.remove(pos);
+            
             closedX.add(currentX);
             closedY.add(currentY);
             
@@ -633,7 +632,7 @@ public class Game extends BasicGameState {
                 nClosed=false;
                 nOpen=false;
                 for(int i=0;i<closedX.size();i++){
-                    if(closedX.get(i)==currentX&&closedY.get(i)==currentY-1){
+                    if(closedX.get(i)==currentX+b[h][0]&&closedY.get(i)==currentY+b[h][1]){
                         nClosed=true;
                     }
                 }
@@ -650,10 +649,10 @@ public class Game extends BasicGameState {
                         fCost[currentX+b[h][0]][currentY+b[h][1]]=gCost[currentX+b[h][0]][currentY+b[h][1]]+hCost[currentX+b[h][0]][currentY+b[h][1]];
                         parentX[currentX+b[h][0]][currentY+b[h][1]]=currentX;
                         parentY[currentX+b[h][0]][currentY+b[h][1]]=currentY;
-                        System.out.println(openX.size());
                     }
                     if(nOpen&&gCost[currentX+b[h][0]][currentY+b[h][1]]<gCost[currentX][currentY]+1){
                         gCost[currentX+b[h][0]][currentY+b[h][1]]=gCost[currentX][currentY]+1;
+                        fCost[currentX+b[h][0]][currentY+b[h][1]]=gCost[currentX+b[h][0]][currentY+b[h][1]]+hCost[currentX+b[h][0]][currentY+b[h][1]];
                         parentX[currentX+b[h][0]][currentY+b[h][1]]=currentX;
                         parentY[currentX+b[h][0]][currentY+b[h][1]]=currentY;
                     }
@@ -663,8 +662,13 @@ public class Game extends BasicGameState {
     }
     
     public void retrace(int sX, int sY, int cX, int cY, int[][] pX, int[][] pY){
-        if(pX[cX][cY]==sX&&pY[cX][cY]==sY){}
-        else{
+        
+        if(pX[cX][cY]==sX&&pY[cX][cY]==sY){
+            drawPath[cX][cY]=true;
+            nextX=cX;
+            nextY=cY;
+        }
+        if(!(pX[cX][cY]==sX&&pY[cX][cY]==sY)){
             drawPath[cX][cY]=true;
             retrace(sX,sY,pX[cX][cY],pY[cX][cY],pX,pY);
         }
