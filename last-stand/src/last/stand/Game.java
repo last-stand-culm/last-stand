@@ -39,6 +39,8 @@ public class Game extends BasicGameState {
     private ArrayList<Integer> zombieY = new ArrayList();
     private ArrayList<Integer> moveC = new ArrayList();
     private ArrayList<Integer> pos = new ArrayList();
+    private ArrayList<Integer> pistolX = new ArrayList();
+    private ArrayList<Integer> pistolY = new ArrayList();
     
     private ArrayList<Boolean> toMove = new ArrayList();
     
@@ -176,7 +178,7 @@ public class Game extends BasicGameState {
                  p250=false;
             }
             if(weaponselc==3){
-                 weapon="pistol";
+                 weapon="p250";
                  m4a1=false;
                  minigun=false;
                  nova=false;
@@ -292,6 +294,9 @@ public class Game extends BasicGameState {
         if(pos.get(i)==4){
             zombieWalkingRight.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
         }
+    }
+    for(int i=0;i<pistolX.size();i++){
+        g.drawRect(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);
     }
     
 
@@ -422,6 +427,18 @@ public class Game extends BasicGameState {
             if(!toMove.get(i)){
                 moveable = findNext(zombieX.get(i),zombieY.get(i),i);
                 if(moveable){
+                    if(nextY<zombieY.get(i)){
+                        pos.set(i,1);
+                    }
+                    if(nextY>zombieY.get(i)){
+                        pos.set(i,2);
+                    }
+                    if(nextX<zombieX.get(i)){
+                        pos.set(i,3);
+                    }
+                    if(nextX>zombieX.get(i)){
+                        pos.set(i,4);
+                    }
                     zombieX.set(i,nextX);
                     zombieY.set(i,nextY);
                 }
@@ -431,6 +448,7 @@ public class Game extends BasicGameState {
                     moveC.remove(i);
                     toMove.remove(i);
                     pos.remove(i);
+                    
                 }
             }
         }
@@ -566,6 +584,28 @@ public class Game extends BasicGameState {
             playerMovement=2;
             buyDoor=false;
         }
+    }
+    if(gc.getInput().isKeyPressed(Input.KEY_SPACE)){
+        if(p250){
+            if(playerMovement==1){
+                pistolX.add(x2*32+8);
+                pistolY.add(y2*32-24);
+            }
+            if(playerMovement==2){
+                pistolX.add(x2*32+8);
+                pistolY.add(y2*32+40);
+            }
+            if(playerMovement==3){
+                pistolX.add(x2*32-24);
+                pistolY.add(y2*32+8);
+            }
+            if(playerMovement==4){
+                pistolX.add(x2*32+40);
+                pistolY.add(y2*32+8);
+            }
+        }
+        
+        
     }
     
      
