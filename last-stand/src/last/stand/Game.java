@@ -6,11 +6,13 @@ import org.newdawn.slick.tiled.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Rectangle;
 
 
 public class Game extends BasicGameState {
     
-    public static int score=0,round=0,kills=0,money=10000,ammo;
+    public static int score=0,round=0,kills=0,money=0,ammo;
     private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0,nextX,nextY;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
@@ -26,6 +28,7 @@ public class Game extends BasicGameState {
     private Image chestClosed;
     private Image doorUp,doorDown,doorRight,doorLeft;
     private Image box_Open2;
+    private Image bulletup,bulletdown,bulletleft,bulletright;
     
     private boolean heart1=true,heart2=true,heart3=true;
     private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
@@ -39,19 +42,23 @@ public class Game extends BasicGameState {
     private ArrayList<Integer> zombieY = new ArrayList();
     private ArrayList<Integer> moveC = new ArrayList();
     private ArrayList<Integer> pos = new ArrayList();
+    private ArrayList<Integer> zombieHP = new ArrayList();
     private ArrayList<Integer> pistolX = new ArrayList();
     private ArrayList<Integer> pistolY = new ArrayList();
+    private ArrayList<Integer> pistolPos = new ArrayList();
     
     private ArrayList<Boolean> toMove = new ArrayList();
+    
+    private Shape zombieBox = new Rectangle(32,32,32,32);
     
     
     private int[][] zombieSpawn=new int[3][2];
     private int[] position=new int[3];
     
-    private boolean[][] drawPath = new boolean[100][100];
     
     
-    private int time=0,test=0,cap=10,playerMovement=1;
+    
+    private int time=0,bulletTime=0,test=0,cap=10,playerMovement=1;
     
     Random randomGenerator = new Random();
             
@@ -101,6 +108,10 @@ public class Game extends BasicGameState {
     Image playerWalkingLm4a1=new Image("res/player_walking_left_m4a1.png");
     Image playerWalkingRm4a1 = new Image("res/player_walking_right_m4a1.png");
     Image playerWalkingDm4a1=new Image("res/player_walking_down_m4a1.png");
+    bulletup=new Image("res/bullet_up.png");
+    bulletdown=new Image("res/bullet_down.png");
+    bulletleft=new Image("res/bullet.png");
+    bulletright=new Image("res/bullet_right.png");
     
     zombieWalkingUp = getAnimation ( zombieWalking, 8 , 1 , 45, 52, 54, 100 );
     zombieWalkingLeft= getAnimation( zombieWalkingL, 1 , 8 , 52 , 45 , 54 , 100);
@@ -125,6 +136,10 @@ public class Game extends BasicGameState {
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
     // rendering all images/strings to screen
+        
+        
+    
+    
     map.render(x*32, y*32); 
     
     
@@ -295,8 +310,12 @@ public class Game extends BasicGameState {
             zombieWalkingRight.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
         }
     }
+    //up=1 down =2 left =3 right=4
     for(int i=0;i<pistolX.size();i++){
-        g.drawRect(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);
+       if(pistolPos.get(i)==1){ bulletup.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
+       if(pistolPos.get(i)==2){bulletdown.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
+       if(pistolPos.get(i)==3){bulletleft.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
+       if(pistolPos.get(i)==4){bulletright.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
     }
     
 
@@ -331,6 +350,7 @@ public class Game extends BasicGameState {
         toMove.add(false);
         moveC.add(2);
         pos.add(2);
+        zombieHP.add(3);
         start=true;
         zombieSpawn[0][0]=12;
         zombieSpawn[0][1]=18;
@@ -338,13 +358,10 @@ public class Game extends BasicGameState {
         zombieSpawn[1][1]=18;
         zombieSpawn[2][0]=28;
         zombieSpawn[2][1]=31;
-        for(int i=0;i<100;i++){
-            for(int j=0;j<100;j++){
-                drawPath[j][i]=false;
-            }
-        }
+        
     }
     time+=delta;
+    bulletTime+=delta;
     if(time>=500){
         moveOut();
         int randomInt = randomGenerator.nextInt(3);
@@ -366,6 +383,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(1);
+                zombieHP.add(3);
             }
         }
         
@@ -384,6 +402,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(2);
+                zombieHP.add(3);
             }
         }
         
@@ -402,6 +421,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(3);
+                zombieHP.add(3);
             }
         }
         
@@ -420,6 +440,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(4);
+                zombieHP.add(3);
             }
         }
         
@@ -441,6 +462,7 @@ public class Game extends BasicGameState {
                     }
                     zombieX.set(i,nextX);
                     zombieY.set(i,nextY);
+                    
                 }
                 if(nextX==x2&&nextY==y2){
                     zombieX.remove(i);
@@ -448,7 +470,7 @@ public class Game extends BasicGameState {
                     moveC.remove(i);
                     toMove.remove(i);
                     pos.remove(i);
-                    
+                    zombieHP.remove(i);
                 }
             }
         }
@@ -457,6 +479,48 @@ public class Game extends BasicGameState {
         time=0;
         
     }
+    
+    if(bulletTime>=1){
+        
+        for(int i=0;i<pistolX.size();i++){
+            
+            if(pistolPos.get(i)==1){
+                pistolY.set(i,pistolY.get(i)-10);
+            }
+            if(pistolPos.get(i)==2){
+                pistolY.set(i,pistolY.get(i)+10);
+            }
+            if(pistolPos.get(i)==3){
+                pistolX.set(i,pistolX.get(i)-10);
+            }
+            if(pistolPos.get(i)==4){
+                pistolX.set(i,pistolX.get(i)+10);
+            }
+            for(int j=0;j<zombieX.size();j++){
+                zombieBox=new Rectangle((x+zombieX.get(j))*32,(y+zombieY.get(j))*32,32,32);
+                if(zombieBox.contains(x*32+pistolX.get(i),y*32+pistolY.get(i))){
+                    pistolX.remove(i);
+                    pistolY.remove(i);
+                    pistolPos.remove(i);
+                    i--;
+                    zombieHP.set(j,zombieHP.get(j)-1);
+                    if(zombieHP.get(j)==0){
+                        zombieX.remove(j);
+                        zombieY.remove(j);
+                        pos.remove(j);
+                        toMove.remove(j);
+                        moveC.remove(j);
+                        zombieHP.remove(j);
+                        j--;
+                        kills++;
+                        money+=50;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    
     
      //to move right and checking for doors
      if(((x2==10&&y2==66)||(x2==10&&y2==67)||(x2==10&&y2==68)||(x2==10&&y2==69))&&!door3Open){
@@ -603,6 +667,7 @@ public class Game extends BasicGameState {
                 pistolX.add(x2*32+40);
                 pistolY.add(y2*32+8);
             }
+            pistolPos.add(playerMovement);
         }
         
         
@@ -632,6 +697,7 @@ public class Game extends BasicGameState {
                     }
                     if(pos.get(i)==4){
                         moveC.set(i,moveC.get(i)+1);
+                        
                         zombieX.set(i,zombieX.get(i)+1);
                     }
                     if(moveC.get(i)==2){
@@ -775,12 +841,10 @@ public class Game extends BasicGameState {
     public void retrace(int sX, int sY, int cX, int cY, int[][] pX, int[][] pY){
         
         if(pX[cX][cY]==sX&&pY[cX][cY]==sY){
-            drawPath[cX][cY]=true;
             nextX=cX;
             nextY=cY;
         }
         if(!(pX[cX][cY]==sX&&pY[cX][cY]==sY)){
-            drawPath[cX][cY]=true;
             retrace(sX,sY,pX[cX][cY],pY[cX][cY],pX,pY);
         }
     }
