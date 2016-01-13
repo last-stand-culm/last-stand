@@ -12,13 +12,14 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Game extends BasicGameState {
     
-    public static int score=0,round=0,kills=0,money=0,ammo;
-    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0,nextX,nextY;
+    public static int score=0,round=0,kills=0,money=10000,ammo;
+    private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0,nextX,nextY,health=3;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
     private Animation playerWalkingUpShotgun,playerWalkingLeftShotgun,playerWalkingRightShotgun,playerWalkingDownShotgun;
     private Animation playerWalkingUpM4a1,playerWalkingLeftM4a1,playerWalkingRightM4a1,playerWalkingDownM4a1;
+    private Animation playerShootingPistolUp,playerShootingPistolDown,playerShootingPistolLeft,playerShootingPistolRight;
     
     public static String weapon="Pistol ";
     
@@ -30,13 +31,15 @@ public class Game extends BasicGameState {
     private Image box_Open2;
     private Image bulletup,bulletdown,bulletleft,bulletright;
     
-    private boolean heart1=true,heart2=true,heart3=true;
     private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
     private boolean buyDoor=false,buyChest=false;
     private boolean start=false;
     private boolean boxOpen2=false;
     private boolean m4a1=false,minigun=false,nova=false,p250=true;
     private boolean boxStart=false;
+    private boolean shooting=false;
+    private boolean broken = false;
+    
     
     private ArrayList<Integer> zombieX = new ArrayList();
     private ArrayList<Integer> zombieY = new ArrayList();
@@ -50,12 +53,13 @@ public class Game extends BasicGameState {
     private ArrayList<Boolean> toMove = new ArrayList();
     
     private Shape zombieBox = new Rectangle(32,32,32,32);
+    private Shape doorBox = new Rectangle(32,32,32,32);
     
     
     private int[][] zombieSpawn=new int[3][2];
     private int[] position=new int[3];
     
-    
+    private boolean[][] door = new boolean[100][100];
     
     
     private int time=0,bulletTime=0,test=0,cap=10,playerMovement=1;
@@ -112,6 +116,10 @@ public class Game extends BasicGameState {
     bulletdown=new Image("res/bullet_down.png");
     bulletleft=new Image("res/bullet.png");
     bulletright=new Image("res/bullet_right.png");
+    Image playerPistolShootingUp = new Image ("res/player_standing_shooting_pistol.png");
+    Image playerPistolShootingDown = new Image ("res/player_standing_down_shooting_pistol.png");
+    Image playerPistolShootingLeft = new Image ("res/player_standing_left_shooting_pistol.png");
+    Image playerPistolShootingRight = new Image ("res/player_standing_rigtht_shooting_pistol.png");
     
     zombieWalkingUp = getAnimation ( zombieWalking, 8 , 1 , 45, 52, 54, 100 );
     zombieWalkingLeft= getAnimation( zombieWalkingL, 1 , 8 , 52 , 45 , 54 , 100);
@@ -132,6 +140,12 @@ public class Game extends BasicGameState {
     playerWalkingRightM4a1=getAnimation(playerWalkingRm4a1 , 1 , 8 , 59 , 36 , 54 , 100);
     playerWalkingDownM4a1=getAnimation(playerWalkingDm4a1 , 8 , 1 , 36 , 59 , 54 , 100);
     
+    //player with pistol shooting animation
+    playerShootingPistolUp=getAnimation(playerPistolShootingUp, 4 , 1 , 36 , 59 , 54 , 100);
+    playerShootingPistolDown=getAnimation(playerPistolShootingDown, 4 , 1 , 36 , 59 , 54 , 100);
+    playerShootingPistolLeft=getAnimation(playerPistolShootingLeft, 1 , 4 , 59 , 36 , 54 , 100);
+    playerShootingPistolRight=getAnimation(playerPistolShootingRight, 1 , 4 , 59 , 36 , 54 , 100);
+    
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
@@ -151,9 +165,9 @@ public class Game extends BasicGameState {
     g.drawString("Money: $"+money,355,25);
     g.drawString("Weapon: "+weapon, 625, 25);
     g.drawString("Ammo: "+ammo, 525, 25);
-    if(heart1==true){heart.draw(850, 20);}
-    if(heart2==true){heart.draw(900, 20);}
-    if(heart3==true){heart.draw(950, 20);}
+    if(health>=1){heart.draw(850, 20);}
+    if(health>=2){heart.draw(900, 20);}
+    if(health==3){heart.draw(950, 20);}
     chestClosed.draw(x*32+1408,y*32+1760);
   
    if(buyChest==true && gc.getInput().isKeyPressed(Input.KEY_E ) && money>=950 ){
@@ -312,12 +326,18 @@ public class Game extends BasicGameState {
     }
     //up=1 down =2 left =3 right=4
     for(int i=0;i<pistolX.size();i++){
-       if(pistolPos.get(i)==1){ bulletup.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
-       if(pistolPos.get(i)==2){bulletdown.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
-       if(pistolPos.get(i)==3){bulletleft.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
-       if(pistolPos.get(i)==4){bulletright.draw(x*32+pistolX.get(i),y*32+pistolY.get(i),8,8);}
+       if(pistolPos.get(i)==1){bulletup.draw(x*32+pistolX.get(i)+4,y*32+pistolY.get(i),8,8);}
+       if(pistolPos.get(i)==2){bulletdown.draw(x*32+pistolX.get(i)-4,y*32+pistolY.get(i),8,8);}
+       if(pistolPos.get(i)==3){bulletleft.draw(x*32+pistolX.get(i),y*32+pistolY.get(i)-4,8,8);}
+       if(pistolPos.get(i)==4){bulletright.draw(x*32+pistolX.get(i),y*32+pistolY.get(i)+4,8,8);}
     }
-    
+    if(shooting==true && p250==true){
+        if(playerMovement==1){playerShootingPistolUp.draw(480, 416, 32, 32);}
+        if(playerMovement==2){playerShootingPistolDown.draw(480, 416, 32, 32);}
+        if(playerMovement==3){playerShootingPistolLeft.draw(480, 416, 32, 32);}
+        if(playerMovement==4){playerShootingPistolRight.draw(480, 416, 32, 32);}
+        shooting=false;
+    }
 
      }
      
@@ -337,7 +357,10 @@ public class Game extends BasicGameState {
       playerWalkingLeftShotgun.update(delta);
       playerWalkingRightShotgun.update(delta);
       playerWalkingDownShotgun.update(delta);
-      
+      playerShootingPistolUp.update(delta);
+      playerShootingPistolDown.update(delta);
+      playerShootingPistolLeft.update(delta);
+      playerShootingPistolRight.update(delta);
      
      //getting the zombie to come out of its spawn and zombie spawning
     if(!start){
@@ -359,6 +382,42 @@ public class Game extends BasicGameState {
         zombieSpawn[2][0]=28;
         zombieSpawn[2][1]=31;
         
+        for(int i=0;i<100;i++){
+            for(int j=0;j<100;j++){
+                door[j][i]=false;
+            }
+        }
+        
+        door[15][34]=true;
+        door[16][34]=true;
+        door[17][34]=true;
+        door[18][34]=true;
+        
+        door[11][66]=true;
+        door[11][67]=true;
+        door[11][68]=true;
+        door[11][69]=true;
+        
+        door[40][69]=true;
+        door[41][69]=true;
+        door[42][69]=true;
+        door[43][69]=true;
+        
+        door[72][70]=true;
+        door[73][70]=true;
+        door[74][70]=true;
+        door[75][70]=true;
+        
+        door[63][51]=true;
+        door[63][52]=true;
+        door[63][53]=true;
+        door[63][54]=true;
+        door[63][55]=true;
+        
+        door[27][23]=true;
+        door[27][24]=true;
+        door[27][25]=true;
+        door[27][26]=true;
     }
     time+=delta;
     bulletTime+=delta;
@@ -496,6 +555,7 @@ public class Game extends BasicGameState {
             if(pistolPos.get(i)==4){
                 pistolX.set(i,pistolX.get(i)+10);
             }
+            
             for(int j=0;j<zombieX.size();j++){
                 zombieBox=new Rectangle((x+zombieX.get(j))*32,(y+zombieY.get(j))*32,32,32);
                 if(zombieBox.contains(x*32+pistolX.get(i),y*32+pistolY.get(i))){
@@ -519,7 +579,40 @@ public class Game extends BasicGameState {
                 }
             }
         }
+        for(int j=0;j<pistolX.size();j++){
+            if(map.getTileId(pistolX.get(j)/32,pistolY.get(j)/32,objectLayer)!=0){
+                pistolX.remove(j);
+                pistolY.remove(j);
+                pistolPos.remove(j);
+                j--;
+                break;
+            }
+            for(int k=0;k<100;k++){
+                for(int l=0;l<100;l++){
+                    if(door[l][k]){
+                        doorBox=new Rectangle(l*32,k*32,32,32);
+                        if(doorBox.contains(pistolX.get(j),pistolY.get(j))){
+                            pistolX.remove(j);
+                            pistolY.remove(j);
+                            pistolPos.remove(j);
+                            j--;
+                            broken=true;
+                            break;
+                        }
+                    }
+                }
+                if(broken){
+                    break;
+                }
+            }
+            if(broken){
+                broken=false;
+                break;
+            }
+        }
+        
     }
+    
     
     
      //to move right and checking for doors
@@ -528,6 +621,10 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door3Open=true;
              money-=750;
+             door[11][66]=false;
+             door[11][67]=false;
+             door[11][68]=false;
+             door[11][69]=false;
          }
      }
      else if(((x2==26&&y2==23)||(x2==26&&y2==24)||(x2==26&&y2==25)||(x2==26&&y2==26))&&!door2Open){
@@ -535,6 +632,11 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door2Open=true;
              money-=750;
+             door[27][23]=false;
+             door[27][24]=false;
+             door[27][25]=false;
+             door[27][26]=false;
+             
          }
      }
      else if(((x2==62&&y2==51)||(x2==62&&y2==52)||(x2==62&&y2==53)||(x2==62&&y2==54)||(x2==62&&y2==55))&&!door6Open){
@@ -542,6 +644,11 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door6Open=true;
              money-=750;
+             door[63][51]=false;
+             door[63][52]=false;
+             door[63][53]=false;
+             door[63][54]=false;
+             door[63][55]=false;
          }
      }
      else if(gc.getInput().isKeyPressed(Input.KEY_D)){
@@ -565,6 +672,10 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door1Open=true;
              money-=750;
+             door[15][34]=false;
+             door[16][34]=false;
+             door[17][34]=false;
+             door[18][34]=false;
          }
      }
      else if(((x2==40&&y2==70)||(x2==41&&y2==70)||(x2==42&&y2==70)||(x2==43&&y2==70))&&!door4Open){
@@ -572,6 +683,10 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door4Open=true;
              money-=750;
+             door[40][69]=false;
+             door[41][69]=false;
+             door[42][69]=false;
+             door[43][69]=false;
          }
      }
      else if(((x2==72&&y2==71)||(x2==73&&y2==71)||(x2==74&&y2==71)||(x2==75&&y2==71))&&!door5Open){
@@ -579,6 +694,10 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door5Open=true;
              money-=750;
+             door[72][71]=false;
+             door[73][71]=false;
+             door[74][71]=false;
+             door[75][71]=false;
          }
      }
      else if(gc.getInput().isKeyPressed(Input.KEY_W)){
@@ -595,6 +714,10 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door3Open=true;
              money-=750;
+             door[11][66]=false;
+             door[11][67]=false;
+             door[11][68]=false;
+             door[11][69]=false;
          }
      }
      else if(((x2==28&&y2==23)||(x2==28&&y2==24)||(x2==28&&y2==25)||(x2==28&&y2==26))&&!door2Open){
@@ -602,6 +725,10 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door2Open=true;
              money-=750;
+             door[27][23]=false;
+             door[27][24]=false;
+             door[27][25]=false;
+             door[27][26]=false;
          }
      }
      else if(((x2==64&&y2==51)||(x2==64&&y2==52)||(x2==64&&y2==53)||(x2==64&&y2==54)||(x2==64&&y2==55))&&!door6Open){
@@ -609,6 +736,11 @@ public class Game extends BasicGameState {
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door6Open=true;
              money-=750;
+             door[63][51]=false;
+             door[63][52]=false;
+             door[63][53]=false;
+             door[63][54]=false;
+             door[63][55]=false;
          }
      }
      else if(gc.getInput().isKeyPressed(Input.KEY_A)){
@@ -625,6 +757,10 @@ public class Game extends BasicGameState {
         if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door1Open=true;
              money-=750;
+             door[15][34]=false;
+             door[16][34]=false;
+             door[17][34]=false;
+             door[18][34]=false;
          }
     }
     else if(((x2==40&&y2==68)||(x2==41&&y2==68)||(x2==42&&y2==68)||(x2==43&&y2==68))&&!door4Open){
@@ -632,6 +768,10 @@ public class Game extends BasicGameState {
         if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door4Open=true;
              money-=750;
+             door[40][69]=false;
+             door[41][69]=false;
+             door[42][69]=false;
+             door[43][69]=false;
          }
     }
     else if(((x2==72&&y2==69)||(x2==73&&y2==69)||(x2==74&&y2==69)||(x2==75&&y2==69))&&!door5Open){
@@ -639,6 +779,10 @@ public class Game extends BasicGameState {
         if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
              door5Open=true;
              money-=750;
+             door[72][70]=false;
+             door[73][70]=false;
+             door[74][70]=false;
+             door[75][70]=false;
          }
     }
     else if(gc.getInput().isKeyPressed(Input.KEY_S)){
@@ -669,10 +813,12 @@ public class Game extends BasicGameState {
             }
             pistolPos.add(playerMovement);
         }
-        
+        shooting=true;
         
     }
     
+    System.out.println("X:"+x2);
+    System.out.println("Y:"+y2);
      
     
 
@@ -747,6 +893,7 @@ public class Game extends BasicGameState {
                 if(map.getTileId(j,i,objectLayer)!=0){
                     walkable[j][i]=false;
                 }
+                if(door[j][i])walkable[j][i]=false;
                 hCost[j][i]=Math.abs(finalX-j)+Math.abs(finalY-i);
             }
         }
