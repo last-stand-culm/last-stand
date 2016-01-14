@@ -31,7 +31,7 @@ public class Game extends BasicGameState {
     private Image box_Open2;
     private Image bulletup,bulletdown,bulletleft,bulletright;
     
-    private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
+    private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=true;
     private boolean buyDoor=false,buyChest=false;
     private boolean start=false;
     private boolean boxOpen2=false;
@@ -56,8 +56,9 @@ public class Game extends BasicGameState {
     private Shape doorBox = new Rectangle(32,32,32,32);
     
     
-    private int[][] zombieSpawn=new int[3][2];
-    private int[] position=new int[3];
+    private int[][] zombieSpawn=new int[48][2];
+    private int[] position=new int[48];
+    private boolean[] spawn = new boolean[48];
     
     private boolean[][] door = new boolean[100][100];
     
@@ -365,9 +366,7 @@ public class Game extends BasicGameState {
      //getting the zombie to come out of its spawn and zombie spawning
     if(!start){
         //up=1,down=2,left=3,right=4;
-        position[0]=2;
-        position[1]=2;
-        position[2]=3;
+        
         zombieX.add(12);
         zombieY.add(20);
         toMove.add(false);
@@ -375,12 +374,163 @@ public class Game extends BasicGameState {
         pos.add(2);
         zombieHP.add(3);
         start=true;
+        
+        //main room
         zombieSpawn[0][0]=12;
         zombieSpawn[0][1]=18;
         zombieSpawn[1][0]=23;
         zombieSpawn[1][1]=18;
         zombieSpawn[2][0]=28;
         zombieSpawn[2][1]=31;
+        position[0]=2;
+        position[1]=2;
+        position[2]=3;
+        //bottom hall left side
+        zombieSpawn[3][0]=12;
+        zombieSpawn[3][1]=45;
+        zombieSpawn[4][0]=8;
+        zombieSpawn[4][1]=39;
+        zombieSpawn[5][0]=3;
+        zombieSpawn[5][1]=45;
+        zombieSpawn[6][0]=10;
+        zombieSpawn[6][1]=61;
+        position[3]=1;
+        position[4]=2;
+        position[5]=4;
+        position[6]=3;
+        //bottom left room
+        zombieSpawn[7][0]=16;
+        zombieSpawn[7][1]=64;
+        zombieSpawn[8][0]=10;
+        zombieSpawn[8][1]=73;
+        zombieSpawn[9][0]=10;
+        zombieSpawn[9][1]=80;
+        zombieSpawn[10][0]=23;
+        zombieSpawn[10][1]=80;
+        position[7]=2;
+        position[8]=4;
+        position[9]=4;
+        position[10]=3;
+        //bottom hall left horizontal
+        zombieSpawn[11][0]=23;
+        zombieSpawn[11][1]=89;
+        zombieSpawn[12][0]=31;
+        zombieSpawn[12][1]=84;
+        zombieSpawn[13][0]=48;
+        zombieSpawn[13][1]=84;
+        zombieSpawn[14][0]=53;
+        zombieSpawn[14][1]=89;
+        zombieSpawn[15][0]=60;
+        zombieSpawn[15][1]=84;
+        zombieSpawn[16][0]=64;
+        zombieSpawn[16][1]=89;
+        zombieSpawn[17][0]=68;
+        zombieSpawn[17][1]=84;
+        zombieSpawn[18][0]=70;
+        zombieSpawn[18][1]=89;
+        position[11]=1;
+        position[12]=2;
+        position[13]=2;
+        position[14]=1;
+        position[15]=2;
+        position[16]=1;
+        position[17]=2;
+        position[18]=1;
+        //bttom middle hall
+        zombieSpawn[19][0]=38;
+        zombieSpawn[19][1]=81;
+        zombieSpawn[20][0]=45;
+        zombieSpawn[20][1]=72;
+        position[19]=4;
+        position[20]=3;
+        //chest room
+        zombieSpawn[21][0]=34;
+        zombieSpawn[21][1]=62;
+        zombieSpawn[22][0]=50;
+        zombieSpawn[22][1]=61;
+        zombieSpawn[23][0]=41;
+        zombieSpawn[23][1]=53;
+        position[21]=4;
+        position[22]=3;
+        position[23]=2;
+        //hall above chest room
+        zombieSpawn[24][0]=30;
+        zombieSpawn[24][1]=46;
+        zombieSpawn[25][0]=22;
+        zombieSpawn[25][1]=39;
+        zombieSpawn[26][0]=21;
+        zombieSpawn[26][1]=45;
+        position[24]=3;
+        position[25]=2;
+        position[26]=1;
+        //top horizontal floor hall and dead end
+        zombieSpawn[27][0]=33;
+        zombieSpawn[27][1]=28;
+        zombieSpawn[28][0]=43;
+        zombieSpawn[28][1]=21;
+        zombieSpawn[29][0]=53;
+        zombieSpawn[29][1]=28;
+        zombieSpawn[30][0]=64;
+        zombieSpawn[30][1]=21;
+        zombieSpawn[31][0]=65;
+        zombieSpawn[31][1]=37;
+        position[27]=1;
+        position[28]=2;
+        position[29]=1;
+        position[30]=2;
+        position[31]=1;
+        //hall leading to right room
+        zombieSpawn[32][0]=41;
+        zombieSpawn[32][1]=32;
+        zombieSpawn[33][0]=48;
+        zombieSpawn[33][1]=32;
+        zombieSpawn[34][0]=47;
+        zombieSpawn[34][1]=44;
+        zombieSpawn[35][0]=50;
+        zombieSpawn[35][1]=37;
+        zombieSpawn[36][0]=60;
+        zombieSpawn[36][1]=41;
+        zombieSpawn[37][0]=58;
+        zombieSpawn[37][1]=57;
+        position[32]=4;
+        position[33]=3;
+        position[34]=1;
+        position[35]=2;
+        position[36]=3;
+        position[37]=1;
+        //far right room
+        zombieSpawn[38][0]=66;
+        zombieSpawn[38][1]=49;
+        zombieSpawn[39][0]=73;
+        zombieSpawn[39][1]=49;
+        zombieSpawn[40][0]=80;
+        zombieSpawn[40][1]=49;
+        zombieSpawn[41][0]=83;
+        zombieSpawn[41][1]=55;
+        zombieSpawn[42][0]=62;
+        zombieSpawn[42][1]=59;
+        zombieSpawn[43][0]=83;
+        zombieSpawn[43][1]=65;
+        zombieSpawn[44][0]=62;
+        zombieSpawn[44][1]=68;
+        zombieSpawn[45][0]=71;
+        zombieSpawn[45][1]=69;
+        position[38]=2;
+        position[39]=2;
+        position[40]=2;
+        position[41]=3;
+        position[42]=4;
+        position[43]=3;
+        position[44]=4;
+        position[45]=1;
+        //vericle hall below right room
+        zombieSpawn[46][0]=70;
+        zombieSpawn[46][1]=73;
+        zombieSpawn[47][0]=77;
+        zombieSpawn[47][1]=81;
+        position[46]=4;
+        position[47]=3;
+        
         
         for(int i=0;i<100;i++){
             for(int j=0;j<100;j++){
@@ -423,7 +573,7 @@ public class Game extends BasicGameState {
     bulletTime+=delta;
     if(time>=500){
         moveOut();
-        int randomInt = randomGenerator.nextInt(3);
+        int randomInt = randomGenerator.nextInt(48);
         for(int i=0;i<pos.size();i++){
         }
            
