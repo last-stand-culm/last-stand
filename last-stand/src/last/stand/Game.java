@@ -221,7 +221,7 @@ public class Game extends BasicGameState {
         }
        Random boxGen =new Random();
        
-        weaponselc=boxGen.nextInt(3);
+        weaponselc=boxGen.nextInt(4);
        
             if(weaponselc==0){
                  g.drawString("m4a1", 464, 398);
@@ -244,27 +244,27 @@ public class Game extends BasicGameState {
       //up=1 down=2 left=3 right=4
    if(playerMovement==1){
       if(p250==true){playerWalkingUp.draw(480, 416, 32, 32); }
-      if(m4a1==true){playerWalkingUpM4a1.draw(480, 416, 32, 32);}
-      if(minigun==true){playerWalkingUp.draw(480, 416, 32, 32);}//change to minigun when artis done
-      if(nova==true){playerWalkingUpShotgun.draw(480, 416, 32, 32);}
+      else if(m4a1==true){playerWalkingUpM4a1.draw(480, 416, 32, 32);}
+      else if(minigun==true){playerWalkingUp.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(nova==true){playerWalkingUpShotgun.draw(480, 416, 32, 32);}
    }
    if(playerMovement==2){
       if(p250==true){playerWalkingDown.draw(480, 416, 32, 32); }
-      if(m4a1==true){playerWalkingDownM4a1.draw(480, 416, 32, 32);}
-      if(minigun==true){playerWalkingDown.draw(480, 416, 32, 32);}//change to minigun when artis done
-      if(nova==true){playerWalkingDownShotgun.draw(480, 416, 32, 32);}
+      else if(m4a1==true){playerWalkingDownM4a1.draw(480, 416, 32, 32);}
+      else if(minigun==true){playerWalkingDown.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(nova==true){playerWalkingDownShotgun.draw(480, 416, 32, 32);}
    }
    if(playerMovement==3){
       if(p250==true){playerWalkingLeft.draw(480, 416, 32, 32); } 
-      if(m4a1==true){playerWalkingLeftM4a1.draw(480, 416, 32, 32);}
-      if(minigun==true){playerWalkingLeft.draw(480, 416, 32, 32);}//change to minigun when artis done
-      if(nova==true){playerWalkingLeftShotgun.draw(480, 416, 32, 32);}
+      else if(m4a1==true){playerWalkingLeftM4a1.draw(480, 416, 32, 32);}
+      else if(minigun==true){playerWalkingLeft.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(nova==true){playerWalkingLeftShotgun.draw(480, 416, 32, 32);}
    }
    if(playerMovement==4){
       if(p250==true){playerWalkingRight.draw(480, 416, 32, 32); }
-      if(m4a1==true){playerWalkingRightM4a1.draw(480, 416, 32, 32);}
-      if(minigun==true){playerWalkingRight.draw(480, 416, 32, 32);}//change to minigun when artis done
-      if(nova==true){playerWalkingRightShotgun.draw(480, 416, 32, 32);}
+      else if(m4a1==true){playerWalkingRightM4a1.draw(480, 416, 32, 32);}
+      else if(minigun==true){playerWalkingRight.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(nova==true){playerWalkingRightShotgun.draw(480, 416, 32, 32);}
    }
     
     if(door1Open==false){ //rendering botton door in main room
@@ -374,7 +374,12 @@ public class Game extends BasicGameState {
         pos.add(2);
         zombieHP.add(3);
         start=true;
-        
+        for(int i=3;i<48;i++){
+            spawn[i]=false;
+        }
+        spawn[0]=true;
+        spawn[1]=true;
+        spawn[2]=true;
         //main room
         zombieSpawn[0][0]=12;
         zombieSpawn[0][1]=18;
@@ -436,7 +441,7 @@ public class Game extends BasicGameState {
         position[16]=1;
         position[17]=2;
         position[18]=1;
-        //bttom middle hall
+        //bottom middle hall
         zombieSpawn[19][0]=38;
         zombieSpawn[19][1]=81;
         zombieSpawn[20][0]=45;
@@ -463,7 +468,7 @@ public class Game extends BasicGameState {
         position[24]=3;
         position[25]=2;
         position[26]=1;
-        //top horizontal floor hall and dead end
+        //top horizontal hall and dead end
         zombieSpawn[27][0]=33;
         zombieSpawn[27][1]=28;
         zombieSpawn[28][0]=43;
@@ -523,7 +528,7 @@ public class Game extends BasicGameState {
         position[43]=3;
         position[44]=4;
         position[45]=1;
-        //vericle hall below right room
+        //vertical hall below right room
         zombieSpawn[46][0]=70;
         zombieSpawn[46][1]=73;
         zombieSpawn[47][0]=77;
@@ -573,8 +578,10 @@ public class Game extends BasicGameState {
     bulletTime+=delta;
     if(time>=500){
         moveOut();
+        
         int randomInt = randomGenerator.nextInt(48);
-        for(int i=0;i<pos.size();i++){
+        while(!spawn[randomInt]){
+            randomInt = randomGenerator.nextInt(48);
         }
            
         //if zombie spawn is Up
@@ -775,6 +782,9 @@ public class Game extends BasicGameState {
              door[11][67]=false;
              door[11][68]=false;
              door[11][69]=false;
+             for(int i=3;i<27;i++){
+                 spawn[i]=true;
+             }
          }
      }
      else if(((x2==26&&y2==23)||(x2==26&&y2==24)||(x2==26&&y2==25)||(x2==26&&y2==26))&&!door2Open){
@@ -799,6 +809,9 @@ public class Game extends BasicGameState {
              door[63][53]=false;
              door[63][54]=false;
              door[63][55]=false;
+             for(int i=27;i<45;i++){
+                 spawn[i]=true;
+             }
          }
      }
      else if(gc.getInput().isKeyPressed(Input.KEY_D)){
@@ -826,6 +839,14 @@ public class Game extends BasicGameState {
              door[16][34]=false;
              door[17][34]=false;
              door[18][34]=false;
+             for(int i=3;i<7;i++){
+                 spawn[i]=true;
+             }
+             for(int i=21;i<27;i++){
+                 spawn[i]=true;
+             }
+             spawn[46]=true;
+             spawn[47]=true;
          }
      }
      else if(((x2==40&&y2==70)||(x2==41&&y2==70)||(x2==42&&y2==70)||(x2==43&&y2==70))&&!door4Open){
@@ -837,6 +858,10 @@ public class Game extends BasicGameState {
              door[41][69]=false;
              door[42][69]=false;
              door[43][69]=false;
+             for(int i=3;i<27;i++){
+                 spawn[i]=true;
+             }
+             
          }
      }
      else if(((x2==72&&y2==71)||(x2==73&&y2==71)||(x2==74&&y2==71)||(x2==75&&y2==71))&&!door5Open){
@@ -848,6 +873,12 @@ public class Game extends BasicGameState {
              door[73][71]=false;
              door[74][71]=false;
              door[75][71]=false;
+             for(int i=7;i<21;i++){
+                 spawn[i]=true;
+             }
+             for(int i=38;i<48;i++){
+                 spawn[i]=true;
+             }
          }
      }
      else if(gc.getInput().isKeyPressed(Input.KEY_W)){
@@ -868,6 +899,12 @@ public class Game extends BasicGameState {
              door[11][67]=false;
              door[11][68]=false;
              door[11][69]=false;
+             for(int i=3;i<24;i++){
+                 spawn[i]=true;
+             }
+             for(int i=21;i<27;i++){
+                 spawn[i]=true;
+             }
          }
      }
      else if(((x2==28&&y2==23)||(x2==28&&y2==24)||(x2==28&&y2==25)||(x2==28&&y2==26))&&!door2Open){
@@ -891,6 +928,9 @@ public class Game extends BasicGameState {
              door[63][53]=false;
              door[63][54]=false;
              door[63][55]=false;
+             for(int i=27;i<45;i++){
+                 spawn[i]=true;
+             }
          }
      }
      else if(gc.getInput().isKeyPressed(Input.KEY_A)){
@@ -911,6 +951,12 @@ public class Game extends BasicGameState {
              door[16][34]=false;
              door[17][34]=false;
              door[18][34]=false;
+             for(int i=3;i<7;i++){
+                 spawn[i]=true;
+             }
+             for(int i=21;i<27;i++){
+                 spawn[i]=true;
+             }
          }
     }
     else if(((x2==40&&y2==68)||(x2==41&&y2==68)||(x2==42&&y2==68)||(x2==43&&y2==68))&&!door4Open){
@@ -922,6 +968,10 @@ public class Game extends BasicGameState {
              door[41][69]=false;
              door[42][69]=false;
              door[43][69]=false;
+             for(int i=3;i<27;i++){
+                 spawn[i]=true;
+             }
+             
          }
     }
     else if(((x2==72&&y2==69)||(x2==73&&y2==69)||(x2==74&&y2==69)||(x2==75&&y2==69))&&!door5Open){
@@ -933,6 +983,9 @@ public class Game extends BasicGameState {
              door[73][70]=false;
              door[74][70]=false;
              door[75][70]=false;
+             for(int i=7;i<21;i++){
+                 spawn[i]=true;
+             }
          }
     }
     else if(gc.getInput().isKeyPressed(Input.KEY_S)){
