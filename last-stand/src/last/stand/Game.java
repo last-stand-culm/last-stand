@@ -31,7 +31,7 @@ public class Game extends BasicGameState {
     private Image box_Open2;
     private Image bulletup,bulletdown,bulletleft,bulletright;
     
-    private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=true;
+    private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
     private boolean buyDoor=false,buyChest=false;
     private boolean start=false;
     private boolean boxOpen2=false;
@@ -687,10 +687,13 @@ public class Game extends BasicGameState {
                     toMove.remove(i);
                     pos.remove(i);
                     zombieHP.remove(i);
+                    health--;
                 }
             }
         }
-        
+        if(health==0){
+            sbg.enterState(4);
+        }
         
         time=0;
         
