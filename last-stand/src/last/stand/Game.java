@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Game extends BasicGameState {
     
-    public static int score=0,round=0,kills=0,money=10000,ammo;
+    public static int score=0,round=1,kills=0,money=750,ammo=0,zedHP=3;
     private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0,nextX,nextY,health=3;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
@@ -372,7 +372,7 @@ public class Game extends BasicGameState {
         toMove.add(false);
         moveC.add(2);
         pos.add(2);
-        zombieHP.add(3);
+        zombieHP.add(zedHP);
         start=true;
         for(int i=3;i<48;i++){
             spawn[i]=false;
@@ -599,7 +599,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(1);
-                zombieHP.add(3);
+                zombieHP.add(zedHP);
             }
         }
         
@@ -618,7 +618,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(2);
-                zombieHP.add(3);
+                zombieHP.add(zedHP);
             }
         }
         
@@ -637,7 +637,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(3);
-                zombieHP.add(3);
+                zombieHP.add(zedHP);
             }
         }
         
@@ -656,7 +656,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(4);
-                zombieHP.add(3);
+                zombieHP.add(zedHP);
             }
         }
         
@@ -772,7 +772,52 @@ public class Game extends BasicGameState {
         }
         
     }
+    //rounds
+    if(kills==10&&round==1){round++;} //2
+    if(kills==25&&round==2){round++;} //3
+    if(kills==40&&round==3){round++;}//4
+    if(kills==55&&round==4){round++;}//5
+    if(kills==75&&round==5){round++;}//6
+    if(kills==100&&round==6){round++;}//7
+    if(kills==115&&round==7){round++;}//8
+    if(kills==135&&round==8){round++;}//9
+    if(kills==150&&round==9){round++;}//10
+    if(kills==160&&round==10){round++;}//11
+    if(kills==170&&round==11){round++;}//12
+    if(kills==200&&round==12){round++;}//13
+    //easy mode
+    if(Options.easy==true){
+        if(round==2 ){cap=11;}
+        if(round==3 ){cap=12;}
+        if(round==4 ){cap=13;}
+        if(round==5 ){zedHP=4;}
+        if(round==6 ){cap=14;}
+        if(round==7 ){cap=15;}
+        if(round==8 ){cap=16;}
+        if(round==9 ){zedHP=5;}
+        if(round==10){cap=17;}
+        if(round==11){zedHP=6;}
+        if(round==12){cap=18;}
+        if(round==13 ){cap=19;}
+    }
     
+    //hard mode
+    if(Options.easy==false){
+        if(round==2 ){cap++;}
+        if(round==3 ){cap++;}
+        if(round==4 ){cap++;}
+        if(round==5 ){}
+        if(round==6 ){cap++;}
+        if(round==7 ){cap++;}
+        if(round==8 ){cap++;}
+        if(round==9 ){}
+        if(round==10){cap++;}
+        if(round==11){}
+        if(round==12){cap++;}
+        if(round==13 ){cap++;
+        
+        }
+    }
     
     
      //to move right and checking for doors
