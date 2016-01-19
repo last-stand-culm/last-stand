@@ -7,7 +7,7 @@ import org.newdawn.slick.state.*;
 public class Options extends BasicGameState {
     
     public boolean musicOn =true;
-    public boolean easy=true;
+    public static boolean easy=true;
     
     private float x,y;
     
