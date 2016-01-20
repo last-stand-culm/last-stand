@@ -10,12 +10,12 @@ public class Credits extends BasicGameState {
     private Image enterNameImage,credits,continue_Button,continue_Button_select;
     private Image exit_button, exit_button_select,continueImage;
     
-    private boolean nameSelected=false,choose=false;
+    
     private boolean start=false;
     
     private String name="";
     
-    
+    private int choose=1;
     
     public Credits(int state){
         
@@ -36,17 +36,19 @@ public class Credits extends BasicGameState {
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
         g.setColor(Color.white);
-        if(nameSelected==false){
+        if(choose==1){
             enterNameImage.draw();
+            g.drawString("PRESS ENTER TO CONTINUE", 450, 300);
             g.drawString(name.toUpperCase(),493,498);
         }
         
-        if(nameSelected==true){
+        if(choose==2){
            credits.draw();
-           choose=true;
+           g.drawString("PRESS ENTER TO CONTINUE",400,700);
+           
         }
         
-        if(choose==true){
+        if(choose==3){
            continueImage.draw();
            continue_Button.draw(60,600);
            exit_button.draw(600,600);
@@ -144,13 +146,26 @@ public class Credits extends BasicGameState {
         }
         int x=Mouse.getX();
         int y=Mouse.getY();
-        System.out.println("x: "+x+" y: "+y);
+        System.out.println("x: "+x+" y: "+(800-y));
         if(gc.getInput().isKeyPressed(Input.KEY_ENTER)){
+            if(choose==2){
+                choose=3;
+            }
+            if(choose==1){
 //            try{
 //                BufferedWriter write = new BufferedWriter(new FileWriter("Score File"));
 //                write.write(name+","+Game.score+","+Game.round+","+Game.kills+","+Options.easy);
 //            }catch(IOException e){System.out.println("Error"+e);}
-            nameSelected=true;
+                choose=2;
+            }
+            
+
+           
+        }
+       
+        if(gc.getInput().isKeyPressed(Input.KEY_ENTER)&& choose==2){
+            choose=3;
+            
         }
     }
     
