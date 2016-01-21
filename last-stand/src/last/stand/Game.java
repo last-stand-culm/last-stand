@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Game extends BasicGameState {
     
-    public static int score=0,round=1,kills=0,money=750,ammo=0,zedHP=3;
+    public static int score=0,round=1,kills=0,money=9900,zedHP=3;
     private int x=-2,y=-14,x2=17,y2=27,x3=42,y3=41,bCount=0,weaponselc=0,nextX,nextY,health=3;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
@@ -160,12 +160,11 @@ public class Game extends BasicGameState {
     
     
     
-    g.drawString("Score: "+score,25,25);
-    g.drawString("Round: "+round,125,25);
-    g.drawString("Kills: "+kills,225,25);
-    g.drawString("Money: $"+money,355,25);
+    g.drawString("Score: "+kills*50,25,25);
+    g.drawString("Round: "+round,225,25);
+    g.drawString("Kills: "+kills,325,25);
+    g.drawString("Money: $"+money,455,25);
     g.drawString("Weapon: "+weapon, 625, 25);
-    g.drawString("Ammo: "+ammo, 525, 25);
     if(health>=1){heart.draw(850, 20);}
     if(health>=2){heart.draw(900, 20);}
     if(health==3){heart.draw(950, 20);}
@@ -733,7 +732,8 @@ public class Game extends BasicGameState {
                         zombieHP.remove(j);
                         j--;
                         kills++;
-                        money+=50;
+                        if(money<=10000){money+=50;}
+                        
                     }
                     break;
                 }

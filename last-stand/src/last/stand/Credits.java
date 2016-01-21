@@ -10,13 +10,15 @@ public class Credits extends BasicGameState {
     private Image enterNameImage,credits,continue_Button,continue_Button_select;
     private Image exit_button, exit_button_select,continueImage;
     
-    
+    private String diff="";
     private boolean start=false;
     
     private String name="";
     
     private int choose=1;
-    
+    private int x;
+    private int y;
+        
     public Credits(int state){
         
     }
@@ -31,10 +33,13 @@ public class Credits extends BasicGameState {
         continueImage=new Image("res/continue_Image.png");
         name="";
         start=false;
-        
+        if(Options.easy)diff="Easy";
+        else diff="Hard";
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
+        x=Mouse.getX();
+        y=800-Mouse.getY();
         g.setColor(Color.white);
         if(choose==1){
             enterNameImage.draw();
@@ -50,12 +55,25 @@ public class Credits extends BasicGameState {
         
         if(choose==3){
            continueImage.draw();
-           continue_Button.draw(60,600);
-           exit_button.draw(600,600);
+           
+           
+           if(x>=90 && x<=441 && y>=652 && y<=754){
+               continue_Button_select.draw(60,600);
+           }
+           else{continue_Button.draw(60,600);}
+           
+           if(x>=629 && x<=980 && y>=652 && y<=752){
+               exit_button_select.draw(600,600);
+           }
+           else  {exit_button.draw(600,600);}
         }
     }
     
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
+        x=Mouse.getX();
+        y=800-Mouse.getY();
+        Input input=gc.getInput();
+        
         if(gc.getInput().isKeyPressed(Input.KEY_A)){
             name+="a";
         }
@@ -144,18 +162,18 @@ public class Credits extends BasicGameState {
             name="";
             start=true;
         }
-        int x=Mouse.getX();
-        int y=Mouse.getY();
-        System.out.println("x: "+x+" y: "+(800-y));
         if(gc.getInput().isKeyPressed(Input.KEY_ENTER)){
             if(choose==2){
                 choose=3;
             }
             if(choose==1){
-//            try{
-//                BufferedWriter write = new BufferedWriter(new FileWriter("Score File"));
-//                write.write(name+","+Game.score+","+Game.round+","+Game.kills+","+Options.easy);
-//            }catch(IOException e){System.out.println("Error"+e);}
+                
+                try{
+                    BufferedWriter write = new BufferedWriter(new FileWriter("H:\\Profile\\Desktop\\grade 12 java projects\\last-stand\\last-stand\\score.txt"));
+                    write.write("NAME\t\tScore\t\tRound\t\tKills\t\tdiff\t\t");
+                    write.write(name+"\t"+Game.kills*50+"\t"+Game.round+"\t"+Game.kills+"\t"+diff);
+                    write.close();
+                }catch(IOException e){System.out.println("Error: "+e);}
                 choose=2;
             }
             
@@ -167,6 +185,15 @@ public class Credits extends BasicGameState {
             choose=3;
             
         }
+        if((x>=90 && x<=441 && y>=652 && y<=754)&& input.isMouseButtonDown(0)){
+            sbg.enterState(0);
+        }
+        if((x>=629 && x<=980 && y>=652 && y<=752)&& input.isMouseButtonDown(0)){
+            gc.exit();
+        }
+        
+        
+        
     }
     
     
