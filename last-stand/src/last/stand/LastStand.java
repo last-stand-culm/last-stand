@@ -20,6 +20,7 @@ public class LastStand extends StateBasedGame {
     public static final int option=2;
     public static final int game=3;
     public static final int credits=4;
+    public static final int scores=5;
 
     public LastStand(){
         super("LastStand");

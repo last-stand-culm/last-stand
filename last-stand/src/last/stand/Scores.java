@@ -6,6 +6,11 @@ import java.io.*;
 public class Scores extends BasicGameState{
     private Image background;
     private int time;
+    
+    public Scores(int state){
+        
+    }
+    
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
         background=new Image("res/score_screen.png");
     }
