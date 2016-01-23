@@ -23,6 +23,8 @@ public class Game extends BasicGameState {
     private Animation playerWalkingMinigunUp,playerWalkingMinigunDown,playerWalkingMinigunLeft,playerWalkingMinigunRight;
     private Animation playerShootingMinigunUp,playerShootingMinigunDown,playerShootingMinigunLeft,playerShootingMinigunRight;
     
+    public Music music;
+    
     public static String weapon="Pistol ";
     
     private TiledMap map;
@@ -172,19 +174,17 @@ public class Game extends BasicGameState {
     playerShootingMinigunDown=getAnimation(playerWalkingDminigun, 2 , 2 , 41 , 53 , 54 , 100);
     playerShootingMinigunLeft=getAnimation(playerWalkingLminigun , 2 , 2 , 53 , 41 , 54 , 100);
     playerShootingMinigunRight=getAnimation(playerWalkingRminigun , 2 , 2 , 53 , 41 , 54 , 100);
+    
+    music =new Music("res/Zombie__Horror_Music_Mix.ogg");
+    music.setVolume(0.5f);
+   if(Options.musicOn==true){ music.loop();}
+    
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
     // rendering all images/strings to screen
-        
-        
-    
-    
     map.render(x*32, y*32); 
-    
-    
-    
-    
+   
     g.drawString("Score: "+kills*50,25,25);
     g.drawString("Round: "+round,225,25);
     g.drawString("Kills: "+kills,325,25);
