@@ -841,9 +841,10 @@ public class Game extends BasicGameState {
             oHeat++;
             if(oHeat>=15)oHT=true;
     }
-    else if(oHT){
+    else if(mGunTime>=1&&oHeat>0){
         oHeat--;
         if(oHeat<=0)oHT=false;
+        mGunTime=0;
     }
     if(m4Time>=100&&m4a1&&shooting){
         if(playerMovement==1){
@@ -865,7 +866,7 @@ public class Game extends BasicGameState {
             pistolPos.add(playerMovement);
             m4Time=0;
     }
-    if(nTime>=500){
+    if(nTime>=500&&nova){
         shooting=false;
     }
     //rounds
@@ -1223,6 +1224,8 @@ public class Game extends BasicGameState {
                         }
                     }
                 }
+                shooting=true;
+                nTime=0;
                 if(sBroken){
                     sBroken=false;
                     break;
@@ -1234,47 +1237,21 @@ public class Game extends BasicGameState {
     }
     if(gc.getInput().isKeyDown(Input.KEY_SPACE)){
         
-    
-        if(minigun){
+        
+        if(m4a1||minigun){
             shooting=true;
         }
     }
-    if(!gc.getInput().isKeyDown(Input.KEY_SPACE)){
+    else{
         
-    
-        if(minigun){
+        
+        if(m4a1||minigun){
             shooting=false;
         }
     }
-    if(gc.getInput().isKeyDown(Input.KEY_SPACE)){
-        
-        
-        if(m4a1){
-            shooting=true;
-        }
     }
-    if(!gc.getInput().isKeyDown(Input.KEY_SPACE)){
-        
-        
-        if(m4a1){
-            shooting=false;
-        }
     }
     
-    if(gc.getInput().isKeyPressed(Input.KEY_SPACE)&&nova&&!shooting){
-            
-        
-        
-        
-            
-        
-        }
-        shooting=true;
-        nTime=0;
-        
-        
-    }
-    }
     
     //base code for zombie spawning and moving out
     public void moveOut(){
