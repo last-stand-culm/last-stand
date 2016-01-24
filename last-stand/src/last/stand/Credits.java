@@ -14,10 +14,17 @@ public class Credits extends BasicGameState {
     private boolean start=false;
     
     private String name="";
+    private String line="";
     
     private int choose=1;
     private int x;
     private int y;
+    private int c=0;
+    public static String s0,s1,s2,s3,s4,s5,s6,s7,s8,s9;
+
+    public static String[] top=new String[10];
+    
+    private int[] topN=new int[10];
         
     public Credits(int state){
         
@@ -169,9 +176,28 @@ public class Credits extends BasicGameState {
             if(choose==1){
                 
                 try{
-                    BufferedWriter write = new BufferedWriter(new FileWriter("H:\\Profile\\Desktop\\grade 12 java projects\\last-stand\\last-stand\\score.txt"));
-                    write.write("NAME\t\tScore\t\tRound\t\tKills\t\tdiff\t\t");
-                    write.write(name+"\t"+Game.kills*50+"\t"+Game.round+"\t"+Game.kills+"\t"+diff);
+                    BufferedReader read=new BufferedReader(new FileReader("score.txt"));
+                    while((line=read.readLine())!=null){
+                        String[] test=line.split(",");
+                        topN[c]=Integer.parseInt(test[3]);
+                        top[c]=line;
+                        c++;
+                    }
+                    for(int i=0;i<10;i++){
+                        if(Game.kills>topN[i]||top[i].equals("0,0,0,0,0")){
+                            for(int j=9;j>=i;j--){
+                                top[j]=top[j-1];
+                                topN[j]=topN[j-1];
+                            }
+                            top[i]=name+","+Game.kills*50+","+Game.round+","+Game.kills+","+diff;
+                            break;
+                        }
+                    }
+                    BufferedWriter write=new BufferedWriter(new FileWriter("score.txt"));
+                    for(int i=0;i<10;i++){
+                        write.write(top[i]);
+                        write.newLine();
+                    }
                     write.close();
                 }catch(IOException e){System.out.println("Error: "+e);}
                 choose=2;

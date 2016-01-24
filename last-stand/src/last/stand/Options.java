@@ -99,7 +99,7 @@ public class Options extends BasicGameState {
            }
       }
         if(x>=527 && y>=449 && x<=883 && y<=555 && input.isMouseButtonDown(0)){
-            sbg.enterState(1);
+            sbg.enterState(5);
         }
         
      }
