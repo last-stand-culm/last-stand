@@ -13,7 +13,7 @@ import org.newdawn.slick.geom.Rectangle;
 public class Game extends BasicGameState {
     
     public static int score=0,round=1,kills=0,money=9000,zedHP=3;
-    private int x=-2,y=-14,x2=17,y2=27,bCount=0,weaponselc=0,nextX,nextY,health=3,oHeat=0;
+    private int x=-2,y=-14,x2=17,y2=27,bCount=0,weaponselc=0,nextX,nextY,health=3,oHeat=0,shotgunX,shotgunY,shotgunPos;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
@@ -45,6 +45,7 @@ public class Game extends BasicGameState {
     private boolean broken = false;
     private boolean sBroken = false;
     private boolean oHT =  false;
+    private boolean shotgunShot=false;
     
     
     private ArrayList<Integer> zombieX = new ArrayList();
@@ -373,7 +374,12 @@ public class Game extends BasicGameState {
         if(playerMovement==3){playerShootingMinigunLeft.draw(480, 416, 32, 32);}
         if(playerMovement==4){playerShootingMinigunRight.draw(480, 416, 32, 32);}
     }
-    
+    if(shotgunShot==true){
+        if(shotgunPos==1){bulletup.draw(shotgunX*32,shotgunY*32);}
+        if(shotgunPos==2){bulletup.draw();}
+        if(shotgunPos==3){bulletup.draw();}
+        if(shotgunPos==4){bulletup.draw();}
+    }
 
      }
      
@@ -868,6 +874,7 @@ public class Game extends BasicGameState {
     }
     if(nTime>=500&&nova){
         shooting=false;
+        shotgunShot=false;
     }
     //rounds
     if(kills==10&&round==1){round++;} //2
@@ -1174,10 +1181,12 @@ public class Game extends BasicGameState {
                             zombieHP.remove(j);
                             pos.remove(j);
                             j--;
+                          
                             sBroken=true;
                             break;
                         }
                     }
+                
                 }
                 if(playerMovement==2){
                     for(int i=0;i<2;i++){
@@ -1231,7 +1240,18 @@ public class Game extends BasicGameState {
                     break;
                 }
             }
-        
+        if(playerMovement==1){
+            shotgunX=x2+x;
+            shotgunY=y2+y-2;
+            shotgunPos=1;
+            shotgunShot=true;
+        }
+        if(playerMovement==2){
+        }
+        if(playerMovement==3){
+        }
+        if(playerMovement==4){
+        }
         
         }
     }
