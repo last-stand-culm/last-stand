@@ -29,6 +29,7 @@ public class LastStand extends StateBasedGame {
         this.addState(new Options(option));
         this.addState(new Game(game));
         this.addState(new Credits(credits));
+        this.addState(new Scores(scores));
         
     }
     public void initStatesList(GameContainer gc)throws SlickException{
@@ -37,6 +38,7 @@ public class LastStand extends StateBasedGame {
         this.getState(option).init(gc, this);
         this.getState(game).init(gc, this);
         this.getState(credits).init(gc, this);
+        this.getState(scores).init(gc, this);
         this.enterState(Menu);
     }
     
