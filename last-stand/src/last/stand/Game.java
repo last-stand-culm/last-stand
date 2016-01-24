@@ -12,8 +12,8 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Game extends BasicGameState {
     
-    public static int score=0,round=1,kills=0,money=9050,zedHP=3;
-    private int x=-2,y=-14,x2=17,y2=27,bCount=0,weaponselc=0,nextX,nextY,health=3;
+    public static int score=0,round=1,kills=0,money=9000,zedHP=3;
+    private int x=-2,y=-14,x2=17,y2=27,bCount=0,weaponselc=0,nextX,nextY,health=3,oHeat=0;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
@@ -43,13 +43,15 @@ public class Game extends BasicGameState {
     private boolean boxStart=false;
     private boolean shooting=false;
     private boolean broken = false;
+    private boolean sBroken = false;
+    private boolean oHT =  false;
     
     
     private ArrayList<Integer> zombieX = new ArrayList();
     private ArrayList<Integer> zombieY = new ArrayList();
     private ArrayList<Integer> moveC = new ArrayList();
     private ArrayList<Integer> pos = new ArrayList();
-    private ArrayList<Integer> zombieHP = new ArrayList();
+    private ArrayList<Double> zombieHP = new ArrayList();
     private ArrayList<Integer> pistolX = new ArrayList();
     private ArrayList<Integer> pistolY = new ArrayList();
     private ArrayList<Integer> pistolPos = new ArrayList();
@@ -67,7 +69,7 @@ public class Game extends BasicGameState {
     private boolean[][] door = new boolean[100][100];
     
     
-    private int time=0,bulletTime=0,test=0,cap=10,playerMovement=1;
+    private int time=0,bulletTime=0,test=0,cap=10,playerMovement=1,mGunTime,m4Time,nTime;
     
     Random randomGenerator = new Random();
             
@@ -237,7 +239,9 @@ public class Game extends BasicGameState {
                  minigun=false;
                  nova=false;
                  p250=true;
+                 
             }
+            shooting=false;
         }
         if(boxStart){
             bCount=0;
@@ -411,7 +415,7 @@ public class Game extends BasicGameState {
         toMove.add(false);
         moveC.add(2);
         pos.add(2);
-        zombieHP.add(zedHP);
+        zombieHP.add((double)zedHP);
         start=true;
         for(int i=3;i<48;i++){
             spawn[i]=false;
@@ -615,6 +619,9 @@ public class Game extends BasicGameState {
     }
     time+=delta;
     bulletTime+=delta;
+    mGunTime+=delta;
+    m4Time+=delta;
+    nTime+=delta;
     if(time>=500){
         moveOut();
         
@@ -638,7 +645,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(1);
-                zombieHP.add(zedHP);
+                zombieHP.add((double)zedHP);
             }
         }
         
@@ -657,7 +664,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(2);
-                zombieHP.add(zedHP);
+                zombieHP.add((double)zedHP);
             }
         }
         
@@ -676,7 +683,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(3);
-                zombieHP.add(zedHP);
+                zombieHP.add((double)zedHP);
             }
         }
         
@@ -695,7 +702,7 @@ public class Game extends BasicGameState {
                 toMove.add(true);
                 moveC.add(0);
                 pos.add(4);
-                zombieHP.add(zedHP);
+                zombieHP.add((double)zedHP);
             }
         }
         
@@ -730,7 +737,7 @@ public class Game extends BasicGameState {
                 }
             }
         }
-        if(health==0){
+        if(health<=0){
             sbg.enterState(4);
         }
         
@@ -739,7 +746,6 @@ public class Game extends BasicGameState {
     }
     
     if(bulletTime>=1){
-        
         for(int i=0;i<pistolX.size();i++){
             
             if(pistolPos.get(i)==1){
@@ -762,8 +768,9 @@ public class Game extends BasicGameState {
                     pistolY.remove(i);
                     pistolPos.remove(i);
                     i--;
-                    zombieHP.set(j,zombieHP.get(j)-1);
-                    if(zombieHP.get(j)==0){
+                    if(minigun)zombieHP.set(j,zombieHP.get(j)-0.5);
+                    if(m4a1||p250)zombieHP.set(j,zombieHP.get(j)-1);
+                    if(zombieHP.get(j)<=0){
                         zombieX.remove(j);
                         zombieY.remove(j);
                         pos.remove(j);
@@ -811,6 +818,55 @@ public class Game extends BasicGameState {
             }
         }
         
+    }
+    if(mGunTime>=1&&shooting&&minigun&&oHeat<15&&!oHT){
+        if(playerMovement==1){
+                pistolX.add(x2*32+8);
+                pistolY.add(y2*32-24);
+            }
+            if(playerMovement==2){
+                pistolX.add(x2*32+8);
+                pistolY.add(y2*32+40);
+            }
+            if(playerMovement==3){
+                pistolX.add(x2*32-24);
+                pistolY.add(y2*32+8);
+            }
+            if(playerMovement==4){
+                pistolX.add(x2*32+40);
+                pistolY.add(y2*32+8);
+            }
+            pistolPos.add(playerMovement);
+            mGunTime=0;
+            oHeat++;
+            if(oHeat>=15)oHT=true;
+    }
+    else if(oHT){
+        oHeat--;
+        if(oHeat<=0)oHT=false;
+    }
+    if(m4Time>=100&&m4a1&&shooting){
+        if(playerMovement==1){
+                pistolX.add(x2*32+8);
+                pistolY.add(y2*32-24);
+            }
+            if(playerMovement==2){
+                pistolX.add(x2*32+8);
+                pistolY.add(y2*32+40);
+            }
+            if(playerMovement==3){
+                pistolX.add(x2*32-24);
+                pistolY.add(y2*32+8);
+            }
+            if(playerMovement==4){
+                pistolX.add(x2*32+40);
+                pistolY.add(y2*32+8);
+            }
+            pistolPos.add(playerMovement);
+            m4Time=0;
+    }
+    if(nTime>=500){
+        shooting=false;
     }
     //rounds
     if(kills==10&&round==1){round++;} //2
@@ -1103,41 +1159,121 @@ public class Game extends BasicGameState {
                 pistolY.add(y2*32+8);
             }
             pistolPos.add(playerMovement);
+            shooting=true;
         }
-       
+        if(nova&&!shooting){
+            for(int j=0;j<zombieX.size();j++){
+                if(playerMovement==1){
+                    for(int i=0;i<2;i++){
+                        if(zombieX.get(j)==x2&&zombieY.get(j)==y2-1-i){
+                            zombieX.remove(j);
+                            zombieY.remove(j);
+                            toMove.remove(j);
+                            moveC.remove(j);
+                            zombieHP.remove(j);
+                            pos.remove(j);
+                            j--;
+                            sBroken=true;
+                            break;
+                        }
+                    }
+                }
+                if(playerMovement==2){
+                    for(int i=0;i<2;i++){
+                        if(zombieX.get(j)==x2&&zombieY.get(j)==y2+1+i){
+                            zombieX.remove(j);
+                            zombieY.remove(j);
+                            toMove.remove(j);
+                            moveC.remove(j);
+                            zombieHP.remove(j);
+                            pos.remove(j);
+                            j--;
+                            sBroken=true;
+                            break;
+                        }
+                    }
+                }
+                if(playerMovement==3){
+                    for(int i=0;i<2;i++){
+                        if(zombieX.get(j)==x2-1-i&&zombieY.get(j)==y2){
+                            zombieX.remove(j);
+                            zombieY.remove(j);
+                            toMove.remove(j);
+                            moveC.remove(j);
+                            zombieHP.remove(j);
+                            pos.remove(j);
+                            j--;
+                            sBroken=true;
+                            break;
+                        }
+                    }
+                }
+                if(playerMovement==4){
+                    for(int i=0;i<2;i++){
+                        if(zombieX.get(j)==x2+1+i&&zombieY.get(j)==y2){
+                            zombieX.remove(j);
+                            zombieY.remove(j);
+                            toMove.remove(j);
+                            moveC.remove(j);
+                            zombieHP.remove(j);
+                            pos.remove(j);
+                            j--;
+                            sBroken=true;
+                            break;
+                        }
+                    }
+                }
+                if(sBroken){
+                    sBroken=false;
+                    break;
+                }
+            }
         
-        shooting=true;
+        
         
     }
-    if(gc.getInput().isKeyDown(Input.KEY_SPACE)&&!shooting){
+    if(gc.getInput().isKeyDown(Input.KEY_SPACE)){
         
     
         if(minigun){
-            if(playerMovement==1){
-                pistolX.add(x2*32+8);
-                pistolY.add(y2*32-24);
-            }
-            if(playerMovement==2){
-                pistolX.add(x2*32+8);
-                pistolY.add(y2*32+40);
-            }
-            if(playerMovement==3){
-                pistolX.add(x2*32-24);
-                pistolY.add(y2*32+8);
-            }
-            if(playerMovement==4){
-                pistolX.add(x2*32+40);
-                pistolY.add(y2*32+8);
-            }
+            shooting=true;
         }
     }
-    if(!gc.getInput().isKeyDown(Input.KEY_SPACE)&&minigun)shooting=false;
+    if(!gc.getInput().isKeyDown(Input.KEY_SPACE)){
+        
     
-    System.out.println("X:"+x2);
-    System.out.println("Y:"+y2);
-     
+        if(minigun){
+            shooting=false;
+        }
+    }
+    if(gc.getInput().isKeyDown(Input.KEY_SPACE)){
+        
+        
+        if(m4a1){
+            shooting=true;
+        }
+    }
+    if(!gc.getInput().isKeyDown(Input.KEY_SPACE)){
+        
+        
+        if(m4a1){
+            shooting=false;
+        }
+    }
     
-
+    if(gc.getInput().isKeyPressed(Input.KEY_SPACE)&&nova&&!shooting){
+            
+        
+        
+        
+            
+        
+        }
+        shooting=true;
+        nTime=0;
+        
+        
+    }
     }
     
     //base code for zombie spawning and moving out
