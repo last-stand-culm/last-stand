@@ -375,10 +375,10 @@ public class Game extends BasicGameState {
         if(playerMovement==4){playerShootingMinigunRight.draw(480, 416, 32, 32);}
     }
     if(shotgunShot==true){
-        if(shotgunPos==1){bulletup.draw(shotgunX*32,shotgunY*32);}
-        if(shotgunPos==2){bulletup.draw();}
-        if(shotgunPos==3){bulletup.draw();}
-        if(shotgunPos==4){bulletup.draw();}
+        if(shotgunPos==1){bulletup.draw(shotgunX*32+8,shotgunY*32);}
+        if(shotgunPos==2){bulletdown.draw(shotgunX*32+8,shotgunY*32);}
+        if(shotgunPos==3){bulletleft.draw(shotgunX*32,shotgunY*32+8);}
+        if(shotgunPos==4){bulletright.draw(shotgunX*32+8,shotgunY*32+8);}
     }
 
      }
@@ -874,6 +874,8 @@ public class Game extends BasicGameState {
     }
     if(nTime>=500&&nova){
         shooting=false;
+    }
+    if(nTime>=100){
         shotgunShot=false;
     }
     //rounds
@@ -1244,15 +1246,23 @@ public class Game extends BasicGameState {
             shotgunX=x2+x;
             shotgunY=y2+y-2;
             shotgunPos=1;
-            shotgunShot=true;
         }
         if(playerMovement==2){
+            shotgunX=x2+x;
+            shotgunY=y2+y+2;
+            shotgunPos=2;
         }
         if(playerMovement==3){
+            shotgunX=x2+x-2;
+            shotgunY=y2+y;
+            shotgunPos=3;
         }
         if(playerMovement==4){
+            shotgunX=x2+x+2;
+            shotgunY=y2+y;
+            shotgunPos=4;
         }
-        
+        shotgunShot=true;
         }
     }
         System.out.println(gc.getInput().isKeyDown(Input.KEY_SPACE));
