@@ -1233,11 +1233,11 @@ public class Game extends BasicGameState {
             }
         
         
-        
+        }
     }
+        System.out.println(gc.getInput().isKeyDown(Input.KEY_SPACE));
     if(gc.getInput().isKeyDown(Input.KEY_SPACE)){
-        
-        
+              
         if(m4a1||minigun){
             shooting=true;
         }
@@ -1250,7 +1250,7 @@ public class Game extends BasicGameState {
         }
     }
     }
-    }
+    
     
     
     //base code for zombie spawning and moving out
