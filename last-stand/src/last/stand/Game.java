@@ -13,7 +13,7 @@ import org.newdawn.slick.geom.Rectangle;
 public class Game extends BasicGameState {
     
     public static int score=0,round=1,kills=0,money=9000,zedHP=3;
-    private int x=-2,y=-14,x2=17,y2=27,bCount=0,weaponselc=0,nextX,nextY,health=3,oHeat=0,shotgunX,shotgunY,shotgunPos;
+    public static int x=-2,y=-14,x2=17,y2=27,bCount=0,weaponselc=0,nextX,nextY,health=3,oHeat=0,shotgunX,shotgunY,shotgunPos;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
     private Animation playerWalkingUp,playerWalkingLeft,playerWalkingRight,playerWalkingDown;
@@ -23,7 +23,7 @@ public class Game extends BasicGameState {
     private Animation playerWalkingMinigunUp,playerWalkingMinigunDown,playerWalkingMinigunLeft,playerWalkingMinigunRight;
     private Animation playerShootingMinigunUp,playerShootingMinigunDown,playerShootingMinigunLeft,playerShootingMinigunRight;
     
-    public Music music;
+    public static Music music;
     
     public static String weapon="Pistol ";
     
@@ -35,44 +35,44 @@ public class Game extends BasicGameState {
     private Image box_Open2;
     private Image bulletup,bulletdown,bulletleft,bulletright;
     
-    private boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
-    private boolean buyDoor=false,buyChest=false;
-    private boolean start=false;
-    private boolean boxOpen2=false;
-    private boolean m4a1=false,minigun=false,nova=false,p250=true;
-    private boolean boxStart=false;
-    private boolean shooting=false;
-    private boolean broken = false;
-    private boolean sBroken = false;
-    private boolean oHT =  false;
-    private boolean shotgunShot=false;
+    public static boolean door1Open=false,door2Open=false,door3Open=false,door4Open=false,door5Open=false,door6Open=false;
+    public static  boolean buyDoor=false,buyChest=false;
+    public static  boolean start=false;
+    public static  boolean boxOpen2=false;
+    public static  boolean m4a1=false,minigun=false,nova=false,p250=true;
+    public static  boolean boxStart=false;
+    public static  boolean shooting=false;
+    public static  boolean broken = false;
+    public static  boolean sBroken = false;
+    public static  boolean oHT =  false;
+    public static  boolean shotgunShot=false;
     
     
-    private ArrayList<Integer> zombieX = new ArrayList();
-    private ArrayList<Integer> zombieY = new ArrayList();
-    private ArrayList<Integer> moveC = new ArrayList();
-    private ArrayList<Integer> pos = new ArrayList();
-    private ArrayList<Double> zombieHP = new ArrayList();
-    private ArrayList<Integer> pistolX = new ArrayList();
-    private ArrayList<Integer> pistolY = new ArrayList();
-    private ArrayList<Integer> pistolPos = new ArrayList();
+    public static  ArrayList<Integer> zombieX = new ArrayList();
+    public static  ArrayList<Integer> zombieY = new ArrayList();
+    public static  ArrayList<Integer> moveC = new ArrayList();
+    public static  ArrayList<Integer> pos = new ArrayList();
+    public static  ArrayList<Double> zombieHP = new ArrayList();
+    public static  ArrayList<Integer> pistolX = new ArrayList();
+    public static  ArrayList<Integer> pistolY = new ArrayList();
+    public static  ArrayList<Integer> pistolPos = new ArrayList();
     
-    private ArrayList<Boolean> toMove = new ArrayList();
+    public static  ArrayList<Boolean> toMove = new ArrayList();
     
-    private Shape zombieBox = new Rectangle(32,32,32,32);
-    private Shape doorBox = new Rectangle(32,32,32,32);
-    
-    
-    private int[][] zombieSpawn=new int[48][2];
-    private int[] position=new int[48];
-    private boolean[] spawn = new boolean[48];
-    
-    private boolean[][] door = new boolean[100][100];
+    public static  Shape zombieBox = new Rectangle(32,32,32,32);
+    public static  Shape doorBox = new Rectangle(32,32,32,32);
     
     
-    private int time=0,bulletTime=0,test=0,cap=10,playerMovement=1,mGunTime,m4Time,nTime;
+    public static  int[][] zombieSpawn=new int[48][2];
+    public static  int[] position=new int[48];
+    public static  boolean[] spawn = new boolean[48];
     
-    Random randomGenerator = new Random();
+    public static  boolean[][] door = new boolean[100][100];
+    
+    
+    public static  int time=0,bulletTime=0,test=0,cap=10,playerMovement=1,mGunTime,m4Time,nTime;
+    
+   public static  Random randomGenerator = new Random();
             
     public Game(int state){
         
@@ -1183,7 +1183,7 @@ public class Game extends BasicGameState {
                             zombieHP.remove(j);
                             pos.remove(j);
                             j--;
-                          
+                            
                             sBroken=true;
                             break;
                         }

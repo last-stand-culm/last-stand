@@ -1,10 +1,15 @@
 package last.stand;
+import java.util.ArrayList;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.state.*;
 
 public class Menu extends BasicGameState {
     
-    private float x,y;
+   
+    
+    private float x5,y5;
     
     private Image menuPic;
     private Image playButton;
@@ -33,28 +38,88 @@ public class Menu extends BasicGameState {
         menuPic.draw();
         playButton.draw(20,150);
         optionButton.draw(20,350);
-        if(x>=44 && y>=198 && x<=406 && y<=306 ){
+        if(x5>=44 && y5>=198 && x5<=406 && y5<=306 ){
         playButtonSelect.draw(20,150);
         }
-        if(x>=45 && y>=398 && x<=406 && y<=508){
+        if(x5>=45 && y5>=398 && x5<=406 && y5<=508){
         optionButtonSelect.draw(20,350);
         }
         
     }
     
-    public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{  
+    public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{ 
+        if(Credits.reset==true){
+            Game.score=0;
+          Game.round=1;
+          Game.kills=0;
+          Game.money=1000000;
+          Game.zedHP=3;
+          Game.x=-2;
+          Game.y=-14;
+          Game.x2=17;
+          Game.y2=27;
+          Game.bCount=0;
+          Game.weaponselc=0;
+          Game.nextX=0;
+          Game.nextY=0;
+          Game.health=3;
+          Game.oHeat=0;
+          Game.shotgunX=0;
+          Game.shotgunY=0;
+          Game.shotgunPos=0;
+    
+          Game.weapon="Pistol ";
+    
+          Game.door1Open=false;
+          Game.door2Open=false;
+          Game.door3Open=false;
+          Game.door4Open=false;
+          Game.door5Open=false;
+          Game.door6Open=false;
+          Game.buyDoor=false;
+          Game.buyChest=false;
+          Game.start=false;
+          Game.boxOpen2=false;
+          Game.m4a1=false;
+          Game.minigun=false;
+          Game.nova=false;
+          Game.p250=true;
+          Game.boxStart=false;
+          Game.shooting=false;
+          Game.broken = false;
+          Game.sBroken = false;
+          Game.oHT =  false;
+          Game.shotgunShot=false;
+    
+          Game.zombieX.clear();
+          Game.zombieY.clear();
+          Game.moveC.clear();
+          Game.pos.clear();
+          Game.zombieHP.clear();
+          Game.pistolX.clear();
+          Game.pistolY.clear();
+          Game. pistolPos.clear();
+        
+          Game.toMove.clear();
+      
+    Credits.reset=false;
+        }
+        
+        
+        
+        
         Input input=gc.getInput();
-        x=input.getMouseX();
-        y=input.getMouseY();
+        x5=input.getMouseX();
+        y5=input.getMouseY();
         //if mouse is over play and left mouse button is clicked
-        if(x>=44 && y>=198 && x<=406 && y<=306 ){
+        if(x5>=44 && y5>=198 && x5<=406 && y5<=306 ){
             if(input.isMouseButtonDown(0)){
                 sound.playAt(-1, 0, 0);
                 sbg.enterState(1);
             }
         }
         //if mouse is over options and left mouse button is clicked
-        if(x>=45 && y>=398 && x<=406 && y<=508){
+        if(x5>=45 && y5>=398 && x5<=406 && y5<=508){
           if(input.isMouseButtonDown(0)){
               sound.playAt(-3,0,0);
               sbg.enterState(2);

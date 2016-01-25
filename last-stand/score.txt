@@ -3,8 +3,8 @@ hardmodetest,1350,3,27,Easy
 campbell,1100,2,22,Easy
 tester,1050,2,21,Easy
 realnumbatwo,850,2,17,Easy
+awawwaawawdmnjskanfahksj,750,2,15,Easy
 jjj,650,2,13,Easy
 numbatwo,550,2,11,Easy
 notdoneasshole,400,1,8,Easy
 nameplz,100,1,2,Easy
-blip,50,1,1,Easy

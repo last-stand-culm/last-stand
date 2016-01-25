@@ -12,6 +12,7 @@ public class Credits extends BasicGameState {
     
     private String diff="";
     private boolean start=false;
+    public static boolean reset=false;
     
     private String name="";
     private String line="";
@@ -213,6 +214,7 @@ public class Credits extends BasicGameState {
         }
         if((x>=90 && x<=441 && y>=652 && y<=754)&& input.isMouseButtonDown(0)){
             sbg.enterState(0);
+            reset=true;
         }
         if((x>=629 && x<=980 && y>=652 && y<=752)&& input.isMouseButtonDown(0)){
             gc.exit();
