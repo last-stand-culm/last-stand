@@ -12,7 +12,7 @@ import org.newdawn.slick.geom.Rectangle;
 
 public class Game extends BasicGameState {
     
-    public static int score=0,round=1,kills=0,money=9000,zedHP=3;
+    public static int score=0,round=1,kills=0,money=750,zedHP=3;
     public static int x=-2,y=-14,x2=17,y2=27,bCount=0,weaponselc=0,nextX,nextY,health=3,oHeat=0,shotgunX,shotgunY,shotgunPos;
     
     private Animation zombieWalkingUp,zombieWalkingLeft,zombieWalkingRight,zombieWalkingDown;
@@ -23,7 +23,7 @@ public class Game extends BasicGameState {
     private Animation playerWalkingMinigunUp,playerWalkingMinigunDown,playerWalkingMinigunLeft,playerWalkingMinigunRight;
     private Animation playerShootingMinigunUp,playerShootingMinigunDown,playerShootingMinigunLeft,playerShootingMinigunRight;
     
-    public static Music music;
+    private Music music;
     
     public static String weapon="Pistol ";
     
@@ -199,16 +199,18 @@ public class Game extends BasicGameState {
     playerShootingMinigunRight=getAnimation(playerWalkingRminigun , 2 , 2 , 53 , 41 , 54 , 100);
 //------------------------------------------------------------------------------
 //game music     
-    music =new Music("res/Zombie__Horror_Music_Mix.ogg");
-    music.setVolume(0.5f);
-   if(Options.musicOn==true){ music.loop();}
+ music =new Music("res/Zombie__Horror_Music_Mix.ogg");
+ music.setVolume(0.5f);
+  if(Options.musicOn==true){ music.loop();}
+  
 //------------------------------------------------------------------------------    
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
     // rendering all images/strings to screen
     map.render(x*32, y*32); 
-   
+   music.setVolume(0.5f);
+  if(Options.musicOn==true){ music.loop();}
     g.drawString("Score: "+kills*50,25,25);
     g.drawString("Round: "+round,225,25);
     g.drawString("Kills: "+kills,325,25);
@@ -768,7 +770,7 @@ public class Game extends BasicGameState {
         }
 //------------------------------------------------------------------------------ 
         
-        
+//set position to the number equal to up down left or right as well as taking away health from zombie        
         for(int i=0;i<zombieX.size();i++){
             if(!toMove.get(i)){
                 moveable = findNext(zombieX.get(i),zombieY.get(i),i);
@@ -800,6 +802,8 @@ public class Game extends BasicGameState {
                 }
             }
         }
+//------------------------------------------------------------------------------
+//if health is zero then enter credit state and set our overal time variable to 0        
         if(health<=0){
             sbg.enterState(4);
         }
@@ -807,23 +811,26 @@ public class Game extends BasicGameState {
         time=0;
         
     }
-    
+//------------------------------------------------------------------------------
+//what direction the bullet moves which depends on where the player is facing     
     if(bulletTime>=1){
         for(int i=0;i<pistolX.size();i++){
             
-            if(pistolPos.get(i)==1){
+            if(pistolPos.get(i)==1){ //up
                 pistolY.set(i,pistolY.get(i)-10);
             }
-            if(pistolPos.get(i)==2){
+            if(pistolPos.get(i)==2){//down
                 pistolY.set(i,pistolY.get(i)+10);
             }
-            if(pistolPos.get(i)==3){
+            if(pistolPos.get(i)==3){//left
                 pistolX.set(i,pistolX.get(i)-10);
             }
-            if(pistolPos.get(i)==4){
+            if(pistolPos.get(i)==4){//right
                 pistolX.set(i,pistolX.get(i)+10);
             }
-            
+//------------------------------------------------------------------------------
+//this is when a bullet enters the same square that has a zombie in it
+//it removes the bullet and if the zombie has 0 health left it removes the zombie as well            
             for(int j=0;j<zombieX.size();j++){
                 zombieBox=new Rectangle((x+zombieX.get(j))*32,(y+zombieY.get(j))*32,32,32);
                 if(zombieBox.contains(x*32+pistolX.get(i),y*32+pistolY.get(i))){
@@ -849,6 +856,9 @@ public class Game extends BasicGameState {
                 }
             }
         }
+//------------------------------------------------------------------------------
+//this part is if the bullet hits a wall either the map or the custom door walls
+//it then removes the bullet        
         for(int j=0;j<pistolX.size();j++){
             if(map.getTileId(pistolX.get(j)/32,pistolY.get(j)/32,objectLayer)!=0){
                 pistolX.remove(j);
@@ -857,6 +867,8 @@ public class Game extends BasicGameState {
                 j--;
                 break;
             }
+//this is for the walls that can be bought by the player because these walls are not a layer on the tile map
+//we had to make a diffrent way for dealing with these            
             for(int k=0;k<100;k++){
                 for(int l=0;l<100;l++){
                     if(door[l][k]){
@@ -882,20 +894,25 @@ public class Game extends BasicGameState {
         }
         
     }
+//------------------------------------------------------------------------------
+//this is for when firing the minigun we put a timer on it so that after a certain
+//amount of bullets the gun stops shooting takes a second than the player must click
+//again to shoot the minigun(basically like the gun overheats)
+//this is also shows which direction the bullets go     
     if(mGunTime>=1&&shooting&&minigun&&oHeat<15&&!oHT){
-        if(playerMovement==1){
+        if(playerMovement==1){//up
                 pistolX.add(x2*32+8);
                 pistolY.add(y2*32-24);
             }
-            if(playerMovement==2){
+            if(playerMovement==2){//down
                 pistolX.add(x2*32+8);
                 pistolY.add(y2*32+40);
             }
-            if(playerMovement==3){
+            if(playerMovement==3){//left
                 pistolX.add(x2*32-24);
                 pistolY.add(y2*32+8);
             }
-            if(playerMovement==4){
+            if(playerMovement==4){//right
                 pistolX.add(x2*32+40);
                 pistolY.add(y2*32+8);
             }
@@ -904,11 +921,15 @@ public class Game extends BasicGameState {
             oHeat++;
             if(oHeat>=15)oHT=true;
     }
+//------------------------------------------------------------------------------
+// this is if the player stops shooting the minigun before it over heats    
     else if(mGunTime>=1&&oHeat>0){
         oHeat--;
         if(oHeat<=0)oHT=false;
         mGunTime=0;
     }
+//------------------------------------------------------------------------------
+//this is for the m4a1 weapon making it shoot in diffrent directions as well as its timer 
     if(m4Time>=100&&m4a1&&shooting){
         if(playerMovement==1){
                 pistolX.add(x2*32+8);
@@ -927,15 +948,18 @@ public class Game extends BasicGameState {
                 pistolY.add(y2*32+8);
             }
             pistolPos.add(playerMovement);
-            m4Time=0;
+            m4Time=0;   
     }
+//------------------------------------------------------------------------------  
+//timer for nova so that after you shoot you wait a second before you can shoot again    
     if(nTime>=500&&nova){
         shooting=false;
     }
     if(nTime>=100){
         shotgunShot=false;
     }
-    //rounds
+//------------------------------------------------------------------------------          
+//linking kills to rounds how many kills you need to get to the next round
     if(kills==10&&round==1){round++;} //2
     if(kills==25&&round==2){round++;} //3
     if(kills==40&&round==3){round++;}//4
@@ -948,7 +972,8 @@ public class Game extends BasicGameState {
     if(kills==160&&round==10){round++;}//11
     if(kills==170&&round==11){round++;}//12
     if(kills==200&&round==12){round++;}//13
-    //easy mode
+//------------------------------------------------------------------------------          
+//easy mode
     if(Options.easy==true){
         if(round==2 ){cap=11;}
         if(round==3 ){cap=12;}
@@ -963,8 +988,8 @@ public class Game extends BasicGameState {
         if(round==12){cap=18;}
         if(round==13 ){cap=19;}
     }
-    
-    //hard mode
+//------------------------------------------------------------------------------         
+ //hard mode
     if(Options.easy==false){
         if(round==2 ){cap++;}
         if(round==3 ){cap++;}
@@ -977,13 +1002,11 @@ public class Game extends BasicGameState {
         if(round==10){cap++;}
         if(round==11){}
         if(round==12){cap++;}
-        if(round==13 ){cap++;
-        
-        }
+        if(round==13 ){cap++;}
     }
+//------------------------------------------------------------------------------         
     
-    
-     //to move right and checking for doors
+//when player moves right and checking for door collision as well as once the door is open then activate the spawners that are in that room
      if(((x2==10&&y2==66)||(x2==10&&y2==67)||(x2==10&&y2==68)||(x2==10&&y2==69))&&!door3Open){
          buyDoor=true;
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
@@ -998,6 +1021,7 @@ public class Game extends BasicGameState {
              }
          }
      }
+     
      else if(((x2==26&&y2==23)||(x2==26&&y2==24)||(x2==26&&y2==25)||(x2==26&&y2==26))&&!door2Open){
          buyDoor=true;
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
@@ -1100,7 +1124,8 @@ public class Game extends BasicGameState {
             buyDoor=false;
          }
      }
-     //to move left and checking for doors
+//------------------------------------------------------------------------------           
+//to move left and checking for doors
      if(((x2==12&&y2==66)||(x2==12&&y2==67)||(x2==12&&y2==68)||(x2==12&&y2==69))&&!door3Open){
          buyDoor=true;
          if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
@@ -1152,7 +1177,8 @@ public class Game extends BasicGameState {
             buyDoor=false;
          }
      }
-     //to move down and checking for doors
+//------------------------------------------------------------------------------           
+//to move down and checking for doors
     if(((x2==15&&y2==33)||(x2==16&&y2==33)||(x2==17&&y2==33)||(x2==18&&y2==33))&&!door1Open){
         buyDoor=true;
         if(gc.getInput().isKeyPressed(Input.KEY_E ) && money>=750){
@@ -1207,33 +1233,45 @@ public class Game extends BasicGameState {
             buyDoor=false;
         }
     }
+//------------------------------------------------------------------------------      
+//if the spacebar is hit it looks for which weapon you have then goes to where 
+//the guns rules are    
     if(gc.getInput().isKeyPressed(Input.KEY_SPACE)){
-        if(p250){
+        if(p250){ //if player has pistol and its facing up
             if(playerMovement==1){
                 pistolX.add(x2*32+8);
                 pistolY.add(y2*32-24);
             }
-            if(playerMovement==2){
+//------------------------------------------------------------------------------                  
+            if(playerMovement==2){//if player has pistol and is looking down
                 pistolX.add(x2*32+8);
                 pistolY.add(y2*32+40);
             }
-            if(playerMovement==3){
+//------------------------------------------------------------------------------                  
+            if(playerMovement==3){//if player is looking left and has pistol
                 pistolX.add(x2*32-24);
                 pistolY.add(y2*32+8);
             }
-            if(playerMovement==4){
+//------------------------------------------------------------------------------                  
+            if(playerMovement==4){//if player is looking right and has pistol
                 pistolX.add(x2*32+40);
                 pistolY.add(y2*32+8);
             }
+//------------------------------------------------------------------------------                  
             pistolPos.add(playerMovement);
             shooting=true;
         }
+//------------------------------------------------------------------------------      
+//this is if the player has the shotgun amd presses space now shooting must be falls here
+//because the shotgun has a diffrent set of rules that differ from every other weapon 
+//other weapons need to hit the zombie multiple times before the zombie dies
+//the shot gun kills the zombie in 1 shot if the zombie is 2 squares in front of him        
         if(nova&&!shooting){
             for(int j=0;j<zombieX.size();j++){
-                if(playerMovement==1){
+                if(playerMovement==1){//up
                     for(int i=0;i<2;i++){
                         if(zombieX.get(j)==x2&&zombieY.get(j)==y2-1-i){
-                            zombieX.remove(j);
+                            zombieX.remove(j);//removing zombie
                             zombieY.remove(j);
                             toMove.remove(j);
                             moveC.remove(j);
@@ -1247,10 +1285,10 @@ public class Game extends BasicGameState {
                     }
                 
                 }
-                if(playerMovement==2){
+                if(playerMovement==2){//down
                     for(int i=0;i<2;i++){
                         if(zombieX.get(j)==x2&&zombieY.get(j)==y2+1+i){
-                            zombieX.remove(j);
+                            zombieX.remove(j);//removing zombie
                             zombieY.remove(j);
                             toMove.remove(j);
                             moveC.remove(j);
@@ -1262,10 +1300,10 @@ public class Game extends BasicGameState {
                         }
                     }
                 }
-                if(playerMovement==3){
+                if(playerMovement==3){//left
                     for(int i=0;i<2;i++){
                         if(zombieX.get(j)==x2-1-i&&zombieY.get(j)==y2){
-                            zombieX.remove(j);
+                            zombieX.remove(j);//removing zombie
                             zombieY.remove(j);
                             toMove.remove(j);
                             moveC.remove(j);
@@ -1277,11 +1315,11 @@ public class Game extends BasicGameState {
                         }
                     }
                 }
-                if(playerMovement==4){
+                if(playerMovement==4){//rigth
                     for(int i=0;i<2;i++){
                         if(zombieX.get(j)==x2+1+i&&zombieY.get(j)==y2){
                             zombieX.remove(j);
-                            zombieY.remove(j);
+                            zombieY.remove(j);//removing zombie
                             toMove.remove(j);
                             moveC.remove(j);
                             zombieHP.remove(j);
@@ -1292,6 +1330,7 @@ public class Game extends BasicGameState {
                         }
                     }
                 }
+//------------------------------------------------------------------------------                      
                 shooting=true;
                 nTime=0;
                 if(sBroken){
@@ -1299,22 +1338,23 @@ public class Game extends BasicGameState {
                     break;
                 }
             }
-        if(playerMovement==1){
+//the coorddinates of where the shotgun bullet is placed depending on difrection            
+        if(playerMovement==1){//up
             shotgunX=x2+x;
             shotgunY=y2+y-2;
             shotgunPos=1;
         }
-        if(playerMovement==2){
+        if(playerMovement==2){//down
             shotgunX=x2+x;
             shotgunY=y2+y+2;
             shotgunPos=2;
         }
-        if(playerMovement==3){
+        if(playerMovement==3){//left
             shotgunX=x2+x-2;
             shotgunY=y2+y;
             shotgunPos=3;
         }
-        if(playerMovement==4){
+        if(playerMovement==4){//right
             shotgunX=x2+x+2;
             shotgunY=y2+y;
             shotgunPos=4;
@@ -1322,7 +1362,10 @@ public class Game extends BasicGameState {
         shotgunShot=true;
         }
     }
+//------------------------------------------------------------------------------          
         System.out.println(gc.getInput().isKeyDown(Input.KEY_SPACE));
+//if m4a1 or minigun is true than the shooting variable is true this is here because
+//the pistol m4a1 and minigun have the same shooting style unlike the shotgun this is their variable        
     if(gc.getInput().isKeyDown(Input.KEY_SPACE)){
               
         if(m4a1||minigun){
@@ -1337,10 +1380,10 @@ public class Game extends BasicGameState {
         }
     }
     }
+//------------------------------------------------------------------------------          
     
     
-    
-    //base code for zombie spawning and moving out
+//base code for zombie spawning and moving out
     public void moveOut(){
         if(time>=500){
             for(int i=0;i<toMove.size();i++){
@@ -1369,7 +1412,14 @@ public class Game extends BasicGameState {
             }
         }
     }
-    
+//------------------------------------------------------------------------------          
+
+//this is the code for the zombies moving to the player we used the A algorithm
+//what this code does is it takes the cordinate of the player and compares in to the cordinate of each square around him
+//which ever one is closet we move the zombie to that postion  
+//if the zombie hits an object the cord of that object(if its not the player)
+//it treats it as if there is nothing there no cordniate so the zombie then moves
+//around the the object   
     public boolean findNext(int startX, int startY, int zNum){
         ArrayList<Integer> openX = new ArrayList();
         ArrayList<Integer> openY = new ArrayList();
@@ -1511,7 +1561,7 @@ public class Game extends BasicGameState {
             retrace(sX,sY,pX[cX][cY],pY[cX][cY],pX,pY);
         }
     }
-     
+//------------------------------------------------------------------------------           
     public int getID(){
         return 3;
     }

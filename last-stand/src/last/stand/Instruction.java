@@ -37,8 +37,9 @@ public class Instruction extends BasicGameState {
      instructionPic.draw();   
      playButtonInstruction.draw(1,635);
      if(x>=25 && y>=682 && x<=386 && y<=792){playButtonSelectInstruction.draw(1,635);}
-     g.drawString("W = move up \nA = move left\nS = move down\nD = move right\nE = select/pick up gun\nESC = bring up menu bar\nLeft mouse button = shoot",100,100);
+     g.drawString("W = move up \nA = move left\nS = move down\nD = move right\nE = select/pick up gun\nSpcebar = shoot",100,100);
      g.drawString("OBJECTIVE:\nyour objective is to survive as long as you can there is\nno win to the game you just do a little better everytime. Your score \nwill be entered into a scoreboard which you can see in the option menu ", 100, 500);
+     g.drawString("you can buy doors if you have enough money also you can use the mystery box which gives you a\ndiffrent weapon",100,220);
      g.drawString("Zombie-\n\n\n\n\nYou-", 100, 300);
      zombie_intsruction.draw(170,290);
      player_instruction.draw(170,400);
