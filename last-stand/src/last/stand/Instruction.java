@@ -19,18 +19,21 @@ public class Instruction extends BasicGameState {
     }
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
+//linking image variables to their Image        
      instructionPic=new Image("res/instructions_new.fw.png");
      playButtonInstruction=new Image ("res/play_button.png");
      playButtonSelectInstruction=new Image("res/play_button_selected.png");
      zombie_intsruction=new Image("res/zombie_instruction1.png");
      player_instruction=new Image("res/player_instruction1.fw.png");
-     
+//------------------------------------------------------------------------------
+//linking sound variable to its audio
      playSound=new Sound("res/menu_button_select_sound1.ogg");
+//------------------------------------------------------------------------------
      
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
-     // rendering all images and strings to the screen
+// rendering all images and strings to the screen
      instructionPic.draw();   
      playButtonInstruction.draw(1,635);
      if(x>=25 && y>=682 && x<=386 && y<=792){playButtonSelectInstruction.draw(1,635);}
@@ -39,7 +42,7 @@ public class Instruction extends BasicGameState {
      g.drawString("Zombie-\n\n\n\n\nYou-", 100, 300);
      zombie_intsruction.draw(170,290);
      player_instruction.draw(170,400);
-     
+//------------------------------------------------------------------------------     
      }
      
      public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
@@ -47,14 +50,14 @@ public class Instruction extends BasicGameState {
         x=input.getMouseX();
         y=input.getMouseY();
         
-        // if mouse is over the play button and button is clicked
+// if mouse is over the play button and button is clicked
         if(x>=25 && y>=682 && x<=386 && y<=792){
             if(input.isMouseButtonDown(0)){
                 playSound.playAt(0,0,0);
                 sbg.enterState(3);
             }
         }
-        
+//------------------------------------------------------------------------------        
         
         
      }
