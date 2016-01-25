@@ -23,14 +23,16 @@ public class Menu extends BasicGameState {
     }
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{  
+//linking all image variables to the images        
         menuPic=new Image("res/main-menu.Jpg");
         playButton=new Image("res/play_button.png");  
         optionButton=new Image("res/option_button1.png");  
         playButtonSelect=new Image("res/play_button_selected.png");  
         optionButtonSelect=new Image("res/option_button_selected1.png"); 
-        
+//------------------------------------------------------------------------------
+//sound variable linking to the audio
         sound = new Sound("res/menu_button_select_sound1.ogg");
-        
+//------------------------------------------------------------------------------       
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException { 
@@ -38,21 +40,23 @@ public class Menu extends BasicGameState {
         menuPic.draw();
         playButton.draw(20,150);
         optionButton.draw(20,350);
+//if mouse hovers over play or option button it highlights it        
         if(x5>=44 && y5>=198 && x5<=406 && y5<=306 ){
         playButtonSelect.draw(20,150);
         }
         if(x5>=45 && y5>=398 && x5<=406 && y5<=508){
         optionButtonSelect.draw(20,350);
         }
-        
+//------------------------------------------------------------------------------        
     }
     
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{ 
+//resets all game variables so they dont repeat       
         if(Credits.reset==true){
-            Game.score=0;
+          Game.score=0;
           Game.round=1;
           Game.kills=0;
-          Game.money=1000000;
+          Game.money=750;
           Game.zedHP=3;
           Game.x=-2;
           Game.y=-14;
@@ -67,9 +71,7 @@ public class Menu extends BasicGameState {
           Game.shotgunX=0;
           Game.shotgunY=0;
           Game.shotgunPos=0;
-    
           Game.weapon="Pistol ";
-    
           Game.door1Open=false;
           Game.door2Open=false;
           Game.door3Open=false;
@@ -102,30 +104,29 @@ public class Menu extends BasicGameState {
         
           Game.toMove.clear();
       
-    Credits.reset=false;
+          Credits.reset=false;
         }
-        
-        
-        
-        
+ //-----------------------------------------------------------------------------     
+ //if mouse is over play and left mouse button is clicked
         Input input=gc.getInput();
         x5=input.getMouseX();
         y5=input.getMouseY();
-        //if mouse is over play and left mouse button is clicked
+        
         if(x5>=44 && y5>=198 && x5<=406 && y5<=306 ){
             if(input.isMouseButtonDown(0)){
                 sound.playAt(-1, 0, 0);
                 sbg.enterState(1);
             }
         }
-        //if mouse is over options and left mouse button is clicked
+//------------------------------------------------------------------------------        
+//if mouse is over options and left mouse button is clicked then enter option state
         if(x5>=45 && y5>=398 && x5<=406 && y5<=508){
           if(input.isMouseButtonDown(0)){
               sound.playAt(-3,0,0);
               sbg.enterState(2);
           }  
         }
-        
+//------------------------------------------------------------------------------        
         
     }
     public int getID(){
