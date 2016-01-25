@@ -19,6 +19,7 @@ public class Scores extends BasicGameState{
     }
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g)throws SlickException{
         background.draw();
+//displaying your score on the score screen        
         if(start){
             for(int i=0;i<10;i++){
                 if(!(top10[i].equals("0,0,0,0,0"))){
@@ -35,9 +36,11 @@ public class Scores extends BasicGameState{
                 }
             }
         }
+//------------------------------------------------------------------------------         
         
     }
     public void update(GameContainer gc, StateBasedGame sbg, int delta)throws SlickException{
+//reading the score from the file        
         if(!start){
             try{
                 BufferedReader read=new BufferedReader(new FileReader("score.txt"));
@@ -50,6 +53,7 @@ public class Scores extends BasicGameState{
             }catch(IOException e){System.out.println("Error: "+e);}
             start=true;
         }
+//------------------------------------------------------------------------------         
     }
     public int getID(){
         return 5;
