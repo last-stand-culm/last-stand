@@ -77,7 +77,7 @@ public class Game extends BasicGameState {
     public Game(int state){
         
     }
-    //base code for all animation
+//base code for all animation 
     public Animation getAnimation ( Image i , int spritesX, int spritesY , int spriteWidth , int spriteHeight, int frames, int duration )
 	{
 		Animation a = new Animation(false);
@@ -94,8 +94,10 @@ public class Game extends BasicGameState {
 		
 		return a;
 	}
+//------------------------------------------------------------------------------    
     
     public void init(GameContainer gc, StateBasedGame sbg)throws SlickException{
+//linking all image variables to their image        
     map=new TiledMap("res/map_game.tmx");
     heart=new Image("res/heart_pixel.png");
     chestClosed=new Image("res/mystery_box_closed.png");
@@ -104,84 +106,103 @@ public class Game extends BasicGameState {
     doorRight=new Image("res/door_for_game_right (1).png");
     doorLeft=new Image("res/door_for_game_left (1).png");
     box_Open2=new Image("res/box_open.png");
+//zombie walking images    
     Image zombieWalking = new Image("res/zombie_animation.png");
     Image zombieWalkingL=new Image("res/zombie_animation_left.png");
     Image zombieWalkingR = new Image("res/zombie_animation_right.png");
     Image zombieWalkingD=new Image("res/zombie_animation_down.png");
+//------------------------------------------------------------------------------
+//player walking images    
     Image playerWalkingU = new Image("res/player_walking_up.png");
     Image playerWalkingL=new Image("res/player_walking_left.png");
     Image playerWalkingR = new Image("res/player_walking_right.png");
     Image playerWalkingD=new Image("res/player_walking_down.png");
-   
+//------------------------------------------------------------------------------    
+//player walking with shotgun Images   
     Image playerWalkingUshotgun = new Image("res/player_walking_shotgun.png");
     Image playerWalkingLshotgun=new Image("res/player_walking_left_shotgun.png");
     Image playerWalkingRshotgun = new Image("res/player_walking_right_shotgun.png");
     Image playerWalkingDshotgun=new Image("res/player_walking_down_shotgun.png");
-    
+//------------------------------------------------------------------------------    
+//player walking with m4a1  
     Image playerWalkingUm4a1 = new Image("res/player_walking_m4a1.png");
     Image playerWalkingLm4a1=new Image("res/player_walking_left_m4a1.png");
     Image playerWalkingRm4a1 = new Image("res/player_walking_right_m4a1.png");
     Image playerWalkingDm4a1=new Image("res/player_walking_down_m4a1.png");
-    
+//------------------------------------------------------------------------------
+//player walking with minigun    
     Image playerWalkingUminigun=new Image("res/minigun_walking_up.png");
     Image playerWalkingLminigun=new Image("res/minigun_walking_left.png");
     Image playerWalkingRminigun=new Image("res/minigun_walking_right.png");
     Image playerWalkingDminigun=new Image("res/minigun_walking_down.png");
-    
+//------------------------------------------------------------------------------
+//player walking with minigun there is a little mix up in variable names    
     Image playerMinigunShootingUp=new Image("res/minigun_walking_down.png");
     Image playerMinigunShootingDown=new Image("res/minigun_walking_down.png");
     Image playerMinigunShootingLeft=new Image("res/minigun_walking_down.png");
     Image playerMinigunShootingRight=new Image("res/minigun_walking_down.png");
-    
+//------------------------------------------------------------------------------  
+//bullet images    
     bulletup=new Image("res/bullet_up.png");
     bulletdown=new Image("res/bullet_down.png");
     bulletleft=new Image("res/bullet.png");
     bulletright=new Image("res/bullet_right.png");
+//------------------------------------------------------------------------------
+//player shooting with pistol Images    
     Image playerPistolShootingUp = new Image ("res/player_standing_shooting_pistol.png");
     Image playerPistolShootingDown = new Image ("res/player_standing_down_shooting_pistol.png");
     Image playerPistolShootingLeft = new Image ("res/player_standing_left_shooting_pistol.png");
     Image playerPistolShootingRight = new Image ("res/player_standing_rigtht_shooting_pistol.png");
-    
+//------------------------------------------------------------------------------
+
+//zombie walking animation    
     zombieWalkingUp = getAnimation ( zombieWalking, 8 , 1 , 45, 52, 54, 100 );
     zombieWalkingLeft= getAnimation( zombieWalkingL, 1 , 8 , 52 , 45 , 54 , 100);
     zombieWalkingRight= getAnimation( zombieWalkingR, 1 , 8 , 52 , 45 , 54 , 100);
     zombieWalkingDown= getAnimation( zombieWalkingD, 8 , 1 , 45 , 52 , 54 , 100);
+//------------------------------------------------------------------------------
+//player walking with pistol animation    
     playerWalkingUp=getAnimation(playerWalkingU , 8 , 1 , 36 , 59 , 54 , 100);
     playerWalkingLeft=getAnimation(playerWalkingL , 1 , 8 , 59 , 36 , 54 , 100);
     playerWalkingRight=getAnimation(playerWalkingR , 1 , 8 , 59 , 36 , 54 , 100);
     playerWalkingDown=getAnimation(playerWalkingD , 8 , 1 , 36 , 59 , 54 , 100);
+//------------------------------------------------------------------------------    
     
-    //animation for m4a1 and shotgun are out of place
+//player walking with shotgun animations
     playerWalkingUpShotgun=getAnimation(playerWalkingUshotgun , 8 , 1 , 35 , 57 , 54 , 100);
     playerWalkingLeftShotgun=getAnimation(playerWalkingLshotgun , 1 , 8 , 57 , 35 , 54 , 100);
     playerWalkingRightShotgun=getAnimation(playerWalkingRshotgun, 1 , 8 , 57 , 35 , 54 , 100);
     playerWalkingDownShotgun=getAnimation(playerWalkingDshotgun , 8 , 1 , 35 , 57 , 54 , 100);
-    
+//------------------------------------------------------------------------------    
+//player walking with m4a1 animation     
     playerWalkingUpM4a1=getAnimation(playerWalkingUm4a1 , 8 , 1 , 36 , 59 , 54 , 100);
     playerWalkingLeftM4a1=getAnimation(playerWalkingLm4a1 , 1 , 8 , 59 , 36 , 54 , 100);
     playerWalkingRightM4a1=getAnimation(playerWalkingRm4a1 , 1 , 8 , 59 , 36 , 54 , 100);
     playerWalkingDownM4a1=getAnimation(playerWalkingDm4a1 , 8 , 1 , 36 , 59 , 54 , 100);
-    
-    //player with pistol shooting animation
+//------------------------------------------------------------------------------    
+//player with pistol shooting animation
     playerShootingPistolUp=getAnimation(playerPistolShootingUp, 4 , 1 , 36 , 59 , 54 , 100);
     playerShootingPistolDown=getAnimation(playerPistolShootingDown, 4 , 1 , 36 , 59 , 54 , 100);
     playerShootingPistolLeft=getAnimation(playerPistolShootingLeft, 1 , 4 , 59 , 36 , 54 , 100);
     playerShootingPistolRight=getAnimation(playerPistolShootingRight, 1 , 4 , 59 , 36 , 54 , 100);
-    
+//------------------------------------------------------------------------------
+//player walking with minigun animation    
     playerWalkingMinigunUp=getAnimation(playerWalkingUminigun, 8 , 1 , 41 , 53 , 54 , 100);
     playerWalkingMinigunDown=getAnimation(playerWalkingDminigun, 8 , 1 , 41 , 53 , 54 , 100);
     playerWalkingMinigunLeft=getAnimation(playerWalkingLminigun , 1 , 8 , 53 , 41 , 54 , 100);
     playerWalkingMinigunRight=getAnimation(playerWalkingRminigun , 1 , 8 , 53 , 41 , 54 , 100);
-    
+//------------------------------------------------------------------------------
+//player shooting with a minigun    
     playerShootingMinigunUp=getAnimation(playerWalkingUminigun, 2 , 2 , 41 , 53 , 54 , 100);
     playerShootingMinigunDown=getAnimation(playerWalkingDminigun, 2 , 2 , 41 , 53 , 54 , 100);
     playerShootingMinigunLeft=getAnimation(playerWalkingLminigun , 2 , 2 , 53 , 41 , 54 , 100);
     playerShootingMinigunRight=getAnimation(playerWalkingRminigun , 2 , 2 , 53 , 41 , 54 , 100);
-    
+//------------------------------------------------------------------------------
+//game music     
     music =new Music("res/Zombie__Horror_Music_Mix.ogg");
     music.setVolume(0.5f);
    if(Options.musicOn==true){ music.loop();}
-    
+//------------------------------------------------------------------------------    
     }
     
     public void render(GameContainer gc,StateBasedGame sbg, Graphics g)throws SlickException {
@@ -193,17 +214,22 @@ public class Game extends BasicGameState {
     g.drawString("Kills: "+kills,325,25);
     g.drawString("Money: $"+money,455,25);
     g.drawString("Weapon: "+weapon, 625, 25);
+//health counter and image render    
     if(health>=1){heart.draw(850, 20);}
     if(health>=2){heart.draw(900, 20);}
     if(health==3){heart.draw(950, 20);}
+//------------------------------------------------------------------------------
+//chest closed image    
     chestClosed.draw(x*32+1408,y*32+1760);
-  
+//------------------------------------------------------------------------------
+//if player buys chest    
    if(buyChest==true && gc.getInput().isKeyPressed(Input.KEY_E ) && money>=950 ){
        money-=950;
        boxOpen2=true;
        boxStart=true;
    }
-    //when buying the chest
+//------------------------------------------------------------------------------   
+//when buying the chest
     if(boxOpen2==true){
         
         box_Open2.draw(x*32+1408,y*32+1760);
@@ -244,6 +270,8 @@ public class Game extends BasicGameState {
             }
             shooting=false;
         }
+//------------------------------------------------------------------------------   
+//giving the player the weapon that the box has choosen and closing the box        
         if(boxStart){
             bCount=0;
             boxStart=false;
@@ -268,34 +296,37 @@ public class Game extends BasicGameState {
        
         if((x2==44 && y2==56) || (x2==45 && y2==56)&& buyChest==false)
         g.drawString("pick up(E)", 464, 398);
-        
+       
     }
-      //up=1 down=2 left=3 right=4
+//------------------------------------------------------------------------------     
+//up=1 down=2 left=3 right=4
+//if player moves up down left or right and also depends on the gun which image gets rendered    
    if(playerMovement==1){
       if(p250==true){playerWalkingUp.draw(480, 416, 32, 32); }
       else if(m4a1==true){playerWalkingUpM4a1.draw(480, 416, 32, 32);}
-      else if(minigun==true){ playerWalkingMinigunUp.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(minigun==true){ playerWalkingMinigunUp.draw(480, 416, 32, 32);}
       else if(nova==true){playerWalkingUpShotgun.draw(480, 416, 32, 32);}
    }
    if(playerMovement==2){
       if(p250==true){playerWalkingDown.draw(480, 416, 32, 32); }
       else if(m4a1==true){playerWalkingDownM4a1.draw(480, 416, 32, 32);}
-      else if(minigun==true){ playerWalkingMinigunDown.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(minigun==true){ playerWalkingMinigunDown.draw(480, 416, 32, 32);}
       else if(nova==true){playerWalkingDownShotgun.draw(480, 416, 32, 32);}
    }
    if(playerMovement==3){
       if(p250==true){playerWalkingLeft.draw(480, 416, 32, 32); } 
       else if(m4a1==true){playerWalkingLeftM4a1.draw(480, 416, 32, 32);}
-      else if(minigun==true){ playerWalkingMinigunLeft.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(minigun==true){ playerWalkingMinigunLeft.draw(480, 416, 32, 32);}
       else if(nova==true){playerWalkingLeftShotgun.draw(480, 416, 32, 32);}
    }
    if(playerMovement==4){
       if(p250==true){playerWalkingRight.draw(480, 416, 32, 32); }
       else if(m4a1==true){playerWalkingRightM4a1.draw(480, 416, 32, 32);}
-      else if(minigun==true){ playerWalkingMinigunRight.draw(480, 416, 32, 32);}//change to minigun when artis done
+      else if(minigun==true){ playerWalkingMinigunRight.draw(480, 416, 32, 32);}
       else if(nova==true){playerWalkingRightShotgun.draw(480, 416, 32, 32);}
    }
-    
+//------------------------------------------------------------------------------ 
+//opening doors if the variable is falls means foor is closed and render the image    
     if(door1Open==false){ //rendering botton door in main room
         doorUp.draw(x*32+480,y*32+1088);
         doorUp.draw(x*32+512,y*32+1088);
@@ -333,13 +364,18 @@ public class Game extends BasicGameState {
         doorRight.draw(x*32+2016,y*32+1728);
         doorRight.draw(x*32+2016,y*32+1760);
     }
+//------------------------------------------------------------------------------ 
+//when you walk up to door and buy it    
     if(buyDoor==true){g.drawString("$750 (E)", 464, 400);}
     if(buyChest==true ){
      g.drawString("$950 (E)", 464, 400);
     }
+//------------------------------------------------------------------------------     
     
+//setting all text colour to red    
     g.setColor(Color.red);
-    
+//------------------------------------------------------------------------------ 
+//zombie position up down left right and dimensions    
     for(int i=0;i<pos.size();i++){
         if(pos.get(i)==1){
             zombieWalkingUp.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
@@ -354,13 +390,17 @@ public class Game extends BasicGameState {
             zombieWalkingRight.draw(x*32+zombieX.get(i)*32,y*32+zombieY.get(i)*32,32,32);
         }
     }
-    //up=1 down =2 left =3 right=4
+//------------------------------------------------------------------------------     
+//up=1 down =2 left =3 right=4
+//position of the bellet when fired    
     for(int i=0;i<pistolX.size();i++){
        if(pistolPos.get(i)==1){bulletup.draw(x*32+pistolX.get(i)+4,y*32+pistolY.get(i),8,8);}
        if(pistolPos.get(i)==2){bulletdown.draw(x*32+pistolX.get(i)-4,y*32+pistolY.get(i),8,8);}
        if(pistolPos.get(i)==3){bulletleft.draw(x*32+pistolX.get(i),y*32+pistolY.get(i)-4,8,8);}
        if(pistolPos.get(i)==4){bulletright.draw(x*32+pistolX.get(i),y*32+pistolY.get(i)+4,8,8);}
     }
+//------------------------------------------------------------------------------ 
+//if the player is holding the pistol and is shotting render the shooting animation    
     if(shooting==true && p250==true){
         if(playerMovement==1){playerShootingPistolUp.draw(480, 416, 32, 32);}
         if(playerMovement==2){playerShootingPistolDown.draw(480, 416, 32, 32);}
@@ -368,25 +408,30 @@ public class Game extends BasicGameState {
         if(playerMovement==4){playerShootingPistolRight.draw(480, 416, 32, 32);}
         shooting=false;
     }
+//------------------------------------------------------------------------------ 
+//if player shoots with minigun     
     if(shooting&&minigun){
         if(playerMovement==1){playerShootingMinigunUp.draw(480, 416, 32, 32);}
         if(playerMovement==2){playerShootingMinigunDown.draw(480, 416, 32, 32);}
         if(playerMovement==3){playerShootingMinigunLeft.draw(480, 416, 32, 32);}
         if(playerMovement==4){playerShootingMinigunRight.draw(480, 416, 32, 32);}
     }
+//------------------------------------------------------------------------------ 
+//special shotgun bullet render    
     if(shotgunShot==true){
         if(shotgunPos==1){bulletup.draw(shotgunX*32+8,shotgunY*32);}
         if(shotgunPos==2){bulletdown.draw(shotgunX*32+8,shotgunY*32);}
         if(shotgunPos==3){bulletleft.draw(shotgunX*32,shotgunY*32+8);}
         if(shotgunPos==4){bulletright.draw(shotgunX*32+8,shotgunY*32+8);}
     }
+//------------------------------------------------------------------------------     
 
      }
      
     public void update(GameContainer gc,StateBasedGame sbg, int delta)throws SlickException{
      int objectLayer = map.getLayerIndex("Tile Layer 1");
      boolean moveable;
-     //update for animations
+//update for animations
       zombieWalkingUp.update(delta);
       zombieWalkingLeft.update(delta);
       zombieWalkingDown.update(delta);
@@ -411,8 +456,9 @@ public class Game extends BasicGameState {
       playerWalkingMinigunDown.update(delta);
       playerWalkingMinigunLeft.update(delta);
       playerWalkingMinigunRight.update(delta);
+//------------------------------------------------------------------------------       
      
-     //getting the zombie to come out of its spawn and zombie spawning
+//getting the zombie to come out of its spawn and zombie spawning also all the diffrent spawn locations on the map
     if(!start){
         //up=1,down=2,left=3,right=4;
         
@@ -584,8 +630,9 @@ public class Game extends BasicGameState {
         zombieSpawn[47][1]=81;
         position[46]=4;
         position[47]=3;
+//------------------------------------------------------------------------------         
         
-        
+//all the door variables for when shooting so the bullet doesnt go through the door when it was not open        
         for(int i=0;i<100;i++){
             for(int j=0;j<100;j++){
                 door[j][i]=false;
@@ -623,11 +670,15 @@ public class Game extends BasicGameState {
         door[27][25]=true;
         door[27][26]=true;
     }
+//------------------------------------------------------------------------------ 
+//diffrent times for when you are shooting each weapon    
     time+=delta;
     bulletTime+=delta;
     mGunTime+=delta;
     m4Time+=delta;
     nTime+=delta;
+//------------------------------------------------------------------------------ 
+//random number for where the zombies spwan at each position    
     if(time>=500){
         moveOut();
         
@@ -635,8 +686,9 @@ public class Game extends BasicGameState {
         while(!spawn[randomInt]){
             randomInt = randomGenerator.nextInt(48);
         }
+//------------------------------------------------------------------------------         
            
-        //if zombie spawn is Up
+//if zombie spawn is Up
         if(position[randomInt]==1){
             test=0;
             for(int i=0;i<zombieX.size();i++){
@@ -654,8 +706,9 @@ public class Game extends BasicGameState {
                 zombieHP.add((double)zedHP);
             }
         }
+//------------------------------------------------------------------------------         
         
-        //if zombie spawn is Down
+//if zombie spawn is Down
         if(position[randomInt]==2){
             test=0;
             for(int i=0;i<zombieX.size();i++){
@@ -673,8 +726,9 @@ public class Game extends BasicGameState {
                 zombieHP.add((double)zedHP);
             }
         }
+//------------------------------------------------------------------------------         
         
-        //if zombie spawn is Left
+//if zombie spawn is Left
         if(position[randomInt]==3){
             test=0;
             for(int i=0;i<zombieX.size();i++){
@@ -692,8 +746,9 @@ public class Game extends BasicGameState {
                 zombieHP.add((double)zedHP);
             }
         }
+//------------------------------------------------------------------------------         
         
-        //if zombie spawn is Right
+//if zombie spawn is Right
         if(position[randomInt]==4){
             test=0;
             for(int i=0;i<zombieX.size();i++){
@@ -711,6 +766,8 @@ public class Game extends BasicGameState {
                 zombieHP.add((double)zedHP);
             }
         }
+//------------------------------------------------------------------------------ 
+        
         
         for(int i=0;i<zombieX.size();i++){
             if(!toMove.get(i)){
